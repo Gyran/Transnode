@@ -1,0 +1,15 @@
+{
+  "name": "transnode",
+  "description": "A webui for Transmission",
+  "version": "0.0.1",
+  "author": "Gyran <Gustav.Ahlberg@gmail.com>",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.1.2",
+    "less-middleware": "*",
+    "express-minify": "0.0.3"
+  }
+}

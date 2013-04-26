@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ember-precompile emberjs/templates/*.handlebars -f public/javascripts/templates.js
