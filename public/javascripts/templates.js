@@ -65,7 +65,7 @@ function program1(depth0,data) {
 
   data.buffer.push("<table id='torrentTable' class='table table-condensed table-bordered table-hover'>\n	<thead>\n		<tr>\n			<th>\n				Status\n			</th>\n			<th>\n				Name\n			</th>\n            <th>\n                DL Rate\n            </th>\n            <th>\n                UL Rate\n            </th>\n		</tr>\n	</thead>\n	<tbody>\n		");
   hashTypes = {};
-  stack1 = helpers.each.call(depth0, "torrents", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "controllers.torrents.torrents", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n	</tbody>\n</table>");
   return buffer;
