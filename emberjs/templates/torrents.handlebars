@@ -1,5 +1,21 @@
-<table id='torrents-list'>
-	{{#each this}}
-		{{render 'torrent' this}}
-	{{/each}}
-</table>
+<thead>
+    <tr>
+        <th>
+            Status
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            DL Rate
+        </th>
+        <th>
+            UL Rate
+        </th>
+    </tr>
+</thead>
+<tbody>
+    {{#each view.content}}
+        {{view view.torrentView contentBinding='this'}}
+    {{/each}}
+</tbody>

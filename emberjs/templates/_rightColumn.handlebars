@@ -3,7 +3,8 @@
 </div>
 
 <div id='torrentListContainer' class="row-fluid">
-	{{partial torrentList}}
+    {{view App.TorrentsView contentBinding='controllers.torrents.torrents' id='torrentTable'}}
+	{{! {{partial torrentList}}
 </div>
 
 <div class="row-fluid">

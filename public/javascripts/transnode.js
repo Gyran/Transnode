@@ -50,7 +50,7 @@ App.Store = DS.Store.extend({
 });
 
 App.TorrentsController = Ember.Controller.extend({
-    _UPDATE_INTERVAL: 5000,
+    _UPDATE_INTERVAL: 10000,
 
     torrents: [{id: 1, name: 'wiisss1'}],
     timer: null,
@@ -72,6 +72,18 @@ App.TorrentsController = Ember.Controller.extend({
         this.set('torrents', App.Torrent.find());
     }
 
+});
+
+App.TorrentView = Ember.View.extend({
+    tagName: 'tr',
+    defaultTemplate: Ember.TEMPLATES['torrent']
+});
+
+App.TorrentsView = Ember.View.extend({
+    tagName: 'table',
+    classNames: ['table table-condensed', 'table-bordered', 'table-hover'],
+    torrentView: App.TorrentView,
+    defaultTemplate: Ember.TEMPLATES['torrents']
 });
 
 App.ApplicationController = Ember.Controller.extend({
