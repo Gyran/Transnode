@@ -49,10 +49,10 @@ App.Store = DS.Store.extend({
     revision: 12
 });
 
-App.TorrentsController = Ember.Controller.extend({
+App.TorrentsController = Ember.ArrayController.extend({
     _UPDATE_INTERVAL: 10000,
 
-    torrents: [{id: 1, name: 'wiisss1'}],
+    torrents: null,
     timer: null,
 
     start: function () {
@@ -81,7 +81,7 @@ App.TorrentView = Ember.View.extend({
 
 App.TorrentsView = Ember.View.extend({
     tagName: 'table',
-    classNames: ['table table-condensed', 'table-bordered', 'table-hover'],
+    classNames: 'table table-condensed table-bordered table-hover',
     torrentView: App.TorrentView,
     defaultTemplate: Ember.TEMPLATES['torrents']
 });
