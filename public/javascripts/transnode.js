@@ -50,7 +50,9 @@ App.Store = DS.Store.extend({
 });
 
 App.TorrentsController = Ember.ArrayController.extend({
-    _UPDATE_INTERVAL: 10000,
+    needs: ['torrentColumns'],
+
+    _UPDATE_INTERVAL: 100000,
 
     torrents: null,
     timer: null,
@@ -70,13 +72,53 @@ App.TorrentsController = Ember.ArrayController.extend({
 
     execute: function () {
         this.set('torrents', App.Torrent.find());
-    }
+    },
 
+    columns: function () {
+        console.log('hej!');
+        console.log(this.get('controller').get('controllers.torrentColumns'));
+        return this.get('controller.controllers.torrentcolumns.columns');
+    }.property()
+
+});
+
+App.TorrentColumn = Ember.Object.extend({
+    name: '',
+    dataField: ''
+});
+
+App.TorrentColumnsController = Ember.ArrayController.extend({
+    columns: [
+      App.TorrentColumn.create({
+          name: 'Status',
+          dataField: 'statusString'
+      }),
+      App.TorrentColumn.create({
+          name: 'Name',
+          dataField: 'name'
+      }),
+      App.TorrentColumn.create({
+          name: 'DL Rate',
+          dataField: 'rateDownload'
+      }),
+      App.TorrentColumn.create({
+          name: 'UL Rate',
+          dataField: 'rateUpload'
+      })
+    ]
+});
+
+App.TorrentController = Ember.ObjectController.extend({
+    needs: ['torrentColumns']
 });
 
 App.TorrentView = Ember.View.extend({
     tagName: 'tr',
-    defaultTemplate: Ember.TEMPLATES['torrent']
+    defaultTemplate: Ember.TEMPLATES['torrent'],
+
+    columns: function () {
+        return this.controllers.torrentcolumns.columns;
+    }
 });
 
 App.TorrentsView = Ember.View.extend({
@@ -87,11 +129,15 @@ App.TorrentsView = Ember.View.extend({
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    needs: ['torrents']
+    needs: ['torrents', 'torrentColumns']
 });
 
 App.ApplicationRoute = Ember.Route.extend({
     activate: function () {
         this.controllerFor('torrents').start();
     }
+});
+
+Ember.Handlebars.registerBoundHelper('torrentField', function (field, torrent, options) {
+    return options.contexts.objectAt(1).get(field);
 });

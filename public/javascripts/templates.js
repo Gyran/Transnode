@@ -92,22 +92,28 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
 Ember.TEMPLATES["torrent"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Ember.Handlebars.helpers; data = data || {};
-  var buffer = '', hashTypes, escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, hashTypes, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, self=this;
 
-
-  data.buffer.push("\n	<td class='status'>\n		");
+function program1(depth0,data,depth1) {
+  
+  var buffer = '', stack1, hashTypes, options;
+  data.buffer.push("\n    <td>\n        ");
   hashTypes = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "statusString", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n	</td>\n	<td class='name'>\n		");
-  hashTypes = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n	</td>\n    <td class='rateDownload'>\n        ");
-  hashTypes = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "rateDownload", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n    </td>\n    <td class='rateUpload'>\n        ");
-  hashTypes = {};
-  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "rateUpload", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  options = {hash:{},contexts:[depth0,depth1],types:["ID","ID"],hashTypes:hashTypes,data:data};
+  data.buffer.push(escapeExpression(((stack1 = helpers.torrentField),stack1 ? stack1.call(depth0, "dataField", "", options) : helperMissing.call(depth0, "torrentField", "dataField", "", options))));
   data.buffer.push("\n    </td>\n");
+  return buffer;
+  }
+
+  data.buffer.push("\n");
+  data.buffer.push("\n");
+  data.buffer.push("\n");
+  data.buffer.push("\n");
+  data.buffer.push("\n\n");
+  hashTypes = {};
+  stack1 = helpers.each.call(depth0, "controller.controllers.torrentColumns.columns", {hash:{},inverse:self.noop,fn:self.programWithDepth(program1, data, depth0),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
   return buffer;
   
 });
@@ -119,6 +125,16 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', hashTypes;
+  data.buffer.push("\n        <th>\n            ");
+  hashTypes = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n        </th>\n    ");
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  var buffer = '', hashTypes;
   data.buffer.push("\n        ");
   hashTypes = {'contentBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "view.torrentView", {hash:{
@@ -128,9 +144,13 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  data.buffer.push("<thead>\n    <tr>\n        <th>\n            Status\n        </th>\n        <th>\n            Name\n        </th>\n        <th>\n            DL Rate\n        </th>\n        <th>\n            UL Rate\n        </th>\n    </tr>\n</thead>\n<tbody>\n    ");
+  data.buffer.push("<thead>\n<tr>\n    ");
   hashTypes = {};
-  stack1 = helpers.each.call(depth0, "view.content", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "controller.controllers.torrentColumns.columns", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n</tr>\n</thead>\n<tbody>\n    ");
+  hashTypes = {};
+  stack1 = helpers.each.call(depth0, "view.content", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n</tbody>\n");
   return buffer;

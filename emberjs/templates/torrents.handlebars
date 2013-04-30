@@ -1,18 +1,11 @@
 <thead>
-    <tr>
+<tr>
+    {{#each controller.controllers.torrentColumns.columns}}
         <th>
-            Status
+            {{name}}
         </th>
-        <th>
-            Name
-        </th>
-        <th>
-            DL Rate
-        </th>
-        <th>
-            UL Rate
-        </th>
-    </tr>
+    {{/each}}
+</tr>
 </thead>
 <tbody>
     {{#each view.content}}
