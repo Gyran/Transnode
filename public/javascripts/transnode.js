@@ -50,11 +50,21 @@ App.Torrent = DS.Model.extend({
     }.property('status'),
 
     rateDownloadConverted: function () {
-        return bytesToSize(this.get('rateDownload'));
+        var dlRate = this.get('rateDownload');
+        if (dlRate > 0) {
+            return bytesToSize(dlRate) + '/s';
+        } else {
+            return '';
+        }
     }.property('rateDownload'),
 
     rateUploadConverted: function () {
-        return bytesToSize(this.get('rateUpload'));
+        var ulRate = this.get('rateUpload');
+        if (ulRate > 0) {
+            return bytesToSize(ulRate) + '/s';
+        } else {
+            return '';
+        }
     }.property('rateUpload'),
 
     sizeConverted: function () {
@@ -62,11 +72,21 @@ App.Torrent = DS.Model.extend({
     }.property('sizeWhenDone'),
 
     downloadedConverted: function () {
-        return bytesToSize(this.get('downloadedEver'));
+        var downloaded = this.get('downloadedEver');
+        if (downloaded > 0) {
+            return bytesToSize(downloaded);
+        } else {
+            return '';
+        }
     }.property('downloadedEver'),
 
     uploadedConverted: function () {
-        return bytesToSize(this.get('uploadedEver'));
+        var uploaded = this.get('uploadedEver');
+        if (uploaded > 0) {
+            return bytesToSize(uploaded);
+        } else {
+            return '';
+        }
     }.property('uploadedEver'),
 
     addedDateConverted: function () {
@@ -82,7 +102,17 @@ App.Torrent = DS.Model.extend({
 
     percentDoneConverted: function () {
         return this.get('percentDone') * 100 + ' %';
-    }.property('percentDone')
+    }.property('percentDone'),
+
+    etaConverted: function () {
+        var eta = this.get('eta');
+        if (eta > 0) {
+            then = moment().add('seconds', eta);
+            return then.fromNow();
+        } else {
+            return '';
+        }
+    }.property('eta')
 
 });
 
@@ -167,15 +197,15 @@ App.TorrentColumnsController = Ember.ArrayController.extend({
       }),
       App.TorrentColumn.create({
           name: 'DL Rate',
-          dataField: 'rateDownload'
+          dataField: 'rateDownloadConverted'
       }),
       App.TorrentColumn.create({
           name: 'UL Rate',
-          dataField: 'rateUpload'
+          dataField: 'rateUploadConverted'
       }),
       App.TorrentColumn.create({
           name: 'ETA',
-          dataField: 'eta'
+          dataField: 'etaConverted'
       })
     ]
 });
