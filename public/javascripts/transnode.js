@@ -101,7 +101,7 @@ App.Torrent = DS.Model.extend({
     }.property('addedDate'),
 
     percentDoneConverted: function () {
-        return this.get('percentDone') * 100 + ' %';
+        return (this.get('percentDone') * 100).toFixed(0) + ' %';
     }.property('percentDone'),
 
     etaConverted: function () {
@@ -112,7 +112,17 @@ App.Torrent = DS.Model.extend({
         } else {
             return '';
         }
-    }.property('eta')
+    }.property('eta'),
+
+    ratioConverted: function () {
+        var ratio = this.get('uploadRatio');
+
+        if (ratio >= 0) {
+            return ratio.toFixed(2);
+        } else {
+            return '';
+        }
+    }.property('uploadRatio')
 
 });
 
@@ -133,7 +143,7 @@ App.Store = DS.Store.extend({
 App.TorrentsController = Ember.ArrayController.extend({
     needs: ['torrentColumns'],
 
-    _UPDATE_INTERVAL: 100000,
+    _UPDATE_INTERVAL: 10000,
 
     torrents: null,
     timer: null,
@@ -189,7 +199,7 @@ App.TorrentColumnsController = Ember.ArrayController.extend({
       }),
       App.TorrentColumn.create({
           name: 'Ratio',
-          dataField: 'uploadRatio'
+          dataField: 'ratioConverted'
       }),
       App.TorrentColumn.create({
           name: 'Date added',
