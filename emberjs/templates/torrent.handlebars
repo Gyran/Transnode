@@ -1,18 +1,33 @@
-{{! <td class='status'>
+<td class='status'>
 	{{statusString}}
-{{! </td>
+</td>
 <td class='name'>
 	{{name}}
-{{! </td>
+</td>
+<td class='size'>
+    {{sizeConverted}}
+</td>
+<td class='done'>
+    {{percentDoneConverted}}
+</td>
+<td class='downloaded'>
+    {{downloadedConverted}}
+</td>
+<td class='uploaded'>
+    {{uploadedConverted}}
+</td>
+<td class='ratio'>
+    {{ratioConverted}}
+</td>
+<td class='addedDate'>
+    {{addedDateConverted}}
+</td>
 <td class='rateDownload'>
-    {{rateDownload}}
-{{! </td>
+    {{rateDownloadConverted}}
+</td>
 <td class='rateUpload'>
-    {{rateUpload}}
-{{! </td> }}
-
-{{#each controller.controllers.torrentColumns.columns}}
-    <td>
-        {{torrentField dataField ..}}
-    </td>
-{{/each}}
+    {{rateUploadConverted}}
+</td>
+<td class='eta'>
+    {{etaConverted}}
+</td>
