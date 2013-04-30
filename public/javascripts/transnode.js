@@ -1,3 +1,12 @@
+function bytesToSize(bytes) {
+    var sizes = [ 'n/a', 'bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    if (bytes === 0) {
+        return "0 " + sizes[1];
+    }
+    var i = +Math.floor(Math.log(bytes) / Math.log(1024));
+    return  (bytes / Math.pow(1024, i)).toFixed( i ? 1 : 0 ) + ' ' + sizes[ isNaN( bytes ) ? 0 : i+1 ];
+}
+
 App.Torrent = DS.Model.extend({
     _STATUS_STOPPED:         0,
     _STATUS_CHECK_WAIT:      1,
@@ -11,6 +20,13 @@ App.Torrent = DS.Model.extend({
     status:         DS.attr('number'),
     rateDownload:   DS.attr('number'),
     rateUpload:     DS.attr('number'),
+    addedDate:      DS.attr('number'),
+    eta:            DS.attr('number'),
+    percentDone:    DS.attr('number'),
+    sizeWhenDone:   DS.attr('number'),
+    downloadedEver: DS.attr('number'),
+    uploadedEver:   DS.attr('number'),
+    uploadRatio:    DS.attr('number'),
 
     statusString: function () {
         switch (this.get('status')) {
@@ -31,7 +47,42 @@ App.Torrent = DS.Model.extend({
             default:
                 return "Unknown status";
         }
-    }.property('status')
+    }.property('status'),
+
+    rateDownloadConverted: function () {
+        return bytesToSize(this.get('rateDownload'));
+    }.property('rateDownload'),
+
+    rateUploadConverted: function () {
+        return bytesToSize(this.get('rateUpload'));
+    }.property('rateUpload'),
+
+    sizeConverted: function () {
+        return bytesToSize(this.get('sizeWhenDone'));
+    }.property('sizeWhenDone'),
+
+    downloadedConverted: function () {
+        return bytesToSize(this.get('downloadedEver'));
+    }.property('downloadedEver'),
+
+    uploadedConverted: function () {
+        return bytesToSize(this.get('uploadedEver'));
+    }.property('uploadedEver'),
+
+    addedDateConverted: function () {
+        var then = moment.unix(this.get('addedDate'));
+        var now = moment();
+
+        if (now.diff(then, 'days') < 10) {
+            return then.fromNow();
+        } else {
+            return then.format('YYYY-MM-DD HH:mm');
+        }
+    }.property('addedDate'),
+
+    percentDoneConverted: function () {
+        return this.get('percentDone') * 100 + ' %';
+    }.property('percentDone')
 
 });
 
@@ -72,14 +123,7 @@ App.TorrentsController = Ember.ArrayController.extend({
 
     execute: function () {
         this.set('torrents', App.Torrent.find());
-    },
-
-    columns: function () {
-        console.log('hej!');
-        console.log(this.get('controller').get('controllers.torrentColumns'));
-        return this.get('controller.controllers.torrentcolumns.columns');
-    }.property()
-
+    }
 });
 
 App.TorrentColumn = Ember.Object.extend({
@@ -98,12 +142,40 @@ App.TorrentColumnsController = Ember.ArrayController.extend({
           dataField: 'name'
       }),
       App.TorrentColumn.create({
+          name: 'Size',
+          dataField: 'sizeConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'Done',
+          dataField: 'percentDoneConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'DL',
+          dataField: 'downloadedConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'UL',
+          dataField: 'uploadedConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'Ratio',
+          dataField: 'uploadRatio'
+      }),
+      App.TorrentColumn.create({
+          name: 'Date added',
+          dataField: 'addedDateConverted'
+      }),
+      App.TorrentColumn.create({
           name: 'DL Rate',
           dataField: 'rateDownload'
       }),
       App.TorrentColumn.create({
           name: 'UL Rate',
           dataField: 'rateUpload'
+      }),
+      App.TorrentColumn.create({
+          name: 'ETA',
+          dataField: 'eta'
       })
     ]
 });
