@@ -16,6 +16,11 @@ App.Torrent = DS.Model.extend({
     _STATUS_SEED_WAIT:       5,
     _STATUS_SEED:            6,
 
+    _ERROR_NONE:            0,
+    _ERROR_TRACKER_WARNING: 1,
+    _ERROR_TRACKER_ERROR:   2,
+    _ERROR_LOCAL_ERROR:     3,
+
     name:           DS.attr('string'),
     status:         DS.attr('number'),
     rateDownload:   DS.attr('number'),
@@ -27,6 +32,7 @@ App.Torrent = DS.Model.extend({
     downloadedEver: DS.attr('number'),
     uploadedEver:   DS.attr('number'),
     uploadRatio:    DS.attr('number'),
+    error:          DS.attr('number'),
 
     statusString: function () {
         switch (this.get('status')) {
@@ -49,6 +55,24 @@ App.Torrent = DS.Model.extend({
         }
     }.property('status'),
 
+    // Filter functions
+    isStopped: function () {
+        return this.get('status') === this._STATUS_STOPPED;
+    }.property('status'),
+
+    isSeeding: function () {
+        return this.get('status') === this._STATUS_SEED;
+    }.property('status'),
+
+    isError: function () {
+        return this.get('error') !== this._ERROR_NONE;
+    }.property('status'),
+
+    isAll: function () {
+        return true;
+    },
+
+    // Values to be displayed
     rateDownloadConverted: function () {
         var dlRate = this.get('rateDownload');
         if (dlRate > 0) {
@@ -143,16 +167,20 @@ App.Store = DS.Store.extend({
 App.TorrentsController = Ember.ArrayController.extend({
     _UPDATE_INTERVAL: 10000,
 
-    torrents: null,
-    timer: null,
+    _torrents: Ember.A(),
+    _timer: null,
+
+    filterBy: 'none',
+    sortProperties: ['addedDate'],
+    sortAscending: false,
 
     start: function () {
         var t = this;
         t.execute();
 
-        this.timer = setInterval(function () {
+        /*this.timer = setInterval(function () {
             t.execute();
-        }, t._UPDATE_INTERVAL);
+        }, t._UPDATE_INTERVAL);*/
     },
 
     stop: function () {
@@ -160,17 +188,29 @@ App.TorrentsController = Ember.ArrayController.extend({
     },
 
     execute: function () {
-        this.set('torrents', App.Torrent.find());
-    }
+        this.set('_torrents', App.Torrent.find());
+    },
+
+    torrents: function () {
+        return this.get('arrangedContent');
+    }.property('content.@each'),
+
+    content: function () {
+        var torrents = this.get('_torrents');
+        var filter = this.get('filterBy');
+
+        if (filter === 'none') {
+            return torrents;
+        } else {
+            return torrents.filterProperty(filter);
+        }
+    }.property('_torrents.@each', 'filterBy')
+
 });
 
 App.TorrentView = Ember.View.extend({
     tagName: 'tr',
-    defaultTemplate: Ember.TEMPLATES['torrent'],
-
-    columns: function () {
-        return this.controllers.torrentcolumns.columns;
-    }
+    defaultTemplate: Ember.TEMPLATES['torrent']
 });
 
 App.TorrentsView = Ember.View.extend({
