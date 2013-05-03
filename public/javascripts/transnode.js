@@ -7,6 +7,16 @@ function bytesToSize(bytes) {
     return  (bytes / Math.pow(1024, i)).toFixed( i ? 1 : 0 ) + ' ' + sizes[ isNaN( bytes ) ? 0 : i+1 ];
 }
 
+DS.RESTSerializer.reopen({
+   keyForAttributeName: function(type, name) {
+        return name;
+    }
+});
+
+App.Store = DS.Store.extend({
+    revision: 12
+});
+
 App.Torrent = DS.Model.extend({
     _STATUS_STOPPED:        0,
     _STATUS_CHECK_WAIT:     1,
@@ -159,18 +169,8 @@ DS.RESTAdapter.reopen({
     namespace: 'transmission'
 });
 
-DS.RESTSerializer.reopen({
-   keyForAttributeName: function(type, name) {
-        return name;
-    }
-});
-
-App.Store = DS.Store.extend({
-    revision: 12
-});
-
 App.TorrentsController = Ember.ArrayController.extend({
-    _UPDATE_INTERVAL: 10000,
+    _UPDATE_INTERVAL: 5000,
 
     _torrents: Ember.A(),
     _timer: null,
@@ -183,9 +183,9 @@ App.TorrentsController = Ember.ArrayController.extend({
         var t = this;
         t.execute();
 
-        /*this.timer = setInterval(function () {
+        this.timer = setInterval(function () {
             t.execute();
-        }, t._UPDATE_INTERVAL);*/
+        }, t._UPDATE_INTERVAL);
     },
 
     stop: function () {
@@ -241,6 +241,7 @@ App.TorrentsView = Ember.View.extend({
 
 App.SelectedTorrentsController = Ember.ArrayController.extend({
     content: Ember.A(),
+    selectedTorrent: null,
 
     addSelected: function (id) {
         this.get('content').pushObject(id);
@@ -250,7 +251,17 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
         var selected = Ember.A();
         selected.pushObject(id);
         this.set('content', selected);
-    }
+        this.update();
+    },
+
+    update: function () {
+        var torrent = App.Torrent.find(this.get('firstSelected'));
+        this.set('selectedTorrent', torrent);
+    },
+
+    firstSelected: function () {
+        return this.get('content.firstObject');
+    }.property('content.firstObject')
 });
 
 App.ApplicationController = Ember.Controller.extend({
