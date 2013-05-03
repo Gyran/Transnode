@@ -8,13 +8,13 @@ function bytesToSize(bytes) {
 }
 
 App.Torrent = DS.Model.extend({
-    _STATUS_STOPPED:         0,
-    _STATUS_CHECK_WAIT:      1,
-    _STATUS_CHECK:           2,
-    _STATUS_DOWNLOAD_WAIT:   3,
-    _STATUS_DOWNLOAD:        4,
-    _STATUS_SEED_WAIT:       5,
-    _STATUS_SEED:            6,
+    _STATUS_STOPPED:        0,
+    _STATUS_CHECK_WAIT:     1,
+    _STATUS_CHECK:          2,
+    _STATUS_DOWNLOAD_WAIT:  3,
+    _STATUS_DOWNLOAD:       4,
+    _STATUS_SEED_WAIT:      5,
+    _STATUS_SEED:           6,
 
     _ERROR_NONE:            0,
     _ERROR_TRACKER_WARNING: 1,
@@ -33,6 +33,7 @@ App.Torrent = DS.Model.extend({
     uploadedEver:   DS.attr('number'),
     uploadRatio:    DS.attr('number'),
     error:          DS.attr('number'),
+    leftUntilDone:  DS.attr('number'),
 
     statusString: function () {
         switch (this.get('status')) {
@@ -68,9 +69,13 @@ App.Torrent = DS.Model.extend({
         return this.get('error') !== this._ERROR_NONE;
     }.property('status'),
 
-    isAll: function () {
-        return true;
-    },
+    isActive: function () {
+        return (this.get('rateDownload') + this.get('rateUpload')) > 0;
+    }.property('rateUpload', 'rateDownload'),
+
+    isCompleted: function () {
+        return (this.get('leftUntilDone') <= 0);
+    }.property('leftUntilDone'),
 
     // Values to be displayed
     rateDownloadConverted: function () {
@@ -188,7 +193,13 @@ App.TorrentsController = Ember.ArrayController.extend({
     },
 
     execute: function () {
-        this.set('_torrents', App.Torrent.find());
+
+        var torrents = App.Torrent.find();
+        if (this.get('filterBy') === 'none') {
+            this.set('_torrents', torrents);
+        } else {
+            this.set('_torrents', torrents.filterProperty(this.get('filterBy')));
+        }
     },
 
     torrents: function () {
@@ -196,21 +207,29 @@ App.TorrentsController = Ember.ArrayController.extend({
     }.property('content.@each'),
 
     content: function () {
-        var torrents = this.get('_torrents');
-        var filter = this.get('filterBy');
-
-        if (filter === 'none') {
-            return torrents;
-        } else {
-            return torrents.filterProperty(filter);
-        }
-    }.property('_torrents.@each', 'filterBy')
+        return this.get('_torrents');
+    }.property('_torrents.@each')
 
 });
 
 App.TorrentView = Ember.View.extend({
     tagName: 'tr',
-    defaultTemplate: Ember.TEMPLATES['torrent']
+    defaultTemplate: Ember.TEMPLATES['torrent'],
+    classNameBindings: ['selected'],
+
+    click: function (e) {
+        var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
+        if (e.metaKey) {
+            selectedTorrentsController.addSelected(this.get('content.id'));
+        } else {
+            selectedTorrentsController.setSelected(this.get('content.id'));
+        }
+    },
+
+    selected: function () {
+        var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
+        return (selectedTorrentsController.get('content').indexOf(this.get('content.id')) !== -1);
+    }.property('controller.controllers.selectedTorrents.@each').cacheable()
 });
 
 App.TorrentsView = Ember.View.extend({
@@ -220,8 +239,22 @@ App.TorrentsView = Ember.View.extend({
     defaultTemplate: Ember.TEMPLATES['torrents']
 });
 
+App.SelectedTorrentsController = Ember.ArrayController.extend({
+    content: Ember.A(),
+
+    addSelected: function (id) {
+        this.get('content').pushObject(id);
+    },
+
+    setSelected: function (id) {
+        var selected = Ember.A();
+        selected.pushObject(id);
+        this.set('content', selected);
+    }
+});
+
 App.ApplicationController = Ember.Controller.extend({
-    needs: ['torrents']
+    needs: ['torrents', 'selectedTorrents']
 });
 
 App.ApplicationRoute = Ember.Route.extend({

@@ -8,3 +8,6 @@ body {
 #torrentListContainer table {
   white-space: nowrap;
 }
+#torrentListContainer table tr.selected {
+  background-color: #f5f5f5;
+}
