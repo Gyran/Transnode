@@ -7,8 +7,8 @@ var express = require('express')
 
 var app = express();
 
-var auth = {username: 'user', password: 'pass'};
-var transmission = new transmissionRpc('http://examplte.com', auth);
+var auth = '';
+var transmission = new transmissionRpc('http://example.com', auth);
 
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.logger("dev"));
@@ -16,13 +16,26 @@ app.use(express.compress());
 app.use(minify());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/transmission/torrents', function (req, res) {
-	transmission.torrentGet(null, null, null, function (error, result) {
-		if (!error) {
-			res.send(JSON.stringify(result));
-		}
-	});
-});
+var torrentsRoute = function (req, res) {
+    ids = null;
+
+    console.log(req.params.id);
+
+    if (req.params.id) {
+        ids = parseInt(req.params.id, 10);
+    }
+
+    transmission.torrentGet(ids, null, null, function (error, result) {
+        if (!error) {
+            res.end(JSON.stringify(result));
+        } else {
+            console.log(error);
+        }
+    });
+};
+
+app.get('/transmission/torrents', torrentsRoute);
+app.get('/transmission/torrents/:id', torrentsRoute);
 
 app.set('port', process.env.PORT || 3000);
 
