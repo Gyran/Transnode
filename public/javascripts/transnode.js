@@ -203,17 +203,23 @@ App.TorrentsController = Ember.ArrayController.extend({
         if (this.get('filterBy') === 'none') {
             this.set('_torrents', torrents);
         } else {
-            this.set('_torrents', torrents.filterProperty(this.get('filterBy')));
+            this.set('_torrents', torrents);
         }
     },
 
     torrents: function () {
         return this.get('arrangedContent');
-    }.property('content.@each'),
+    }.property('content.@each').cacheable(),
 
     content: function () {
-        return this.get('_torrents');
-    }.property('_torrents.@each')
+        var filter = this.get('filterBy');
+
+        if (filter === 'none') {
+            return this.get('_torrents');
+        } else {
+            return this.get('_torrents').filterProperty(filter);
+        }
+    }.property('_torrents.@each', 'filterBy').cacheable()
 
 });
 
