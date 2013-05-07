@@ -170,7 +170,7 @@ DS.RESTAdapter.reopen({
 });
 
 App.TorrentsController = Ember.ArrayController.extend({
-    _UPDATE_INTERVAL: 5000,
+    _UPDATE_INTERVAL: 10000,
 
     _torrents: Ember.A(),
     _timer: null,
@@ -265,7 +265,7 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    needs: ['torrents', 'selectedTorrents']
+    needs: settings.getNeedsArray()
 });
 
 App.ApplicationRoute = Ember.Route.extend({
@@ -277,3 +277,4 @@ App.ApplicationRoute = Ember.Route.extend({
 Ember.Handlebars.registerBoundHelper('torrentField', function (field, torrent, options) {
     return options.contexts.objectAt(1).get(field);
 });
+
