@@ -28,6 +28,7 @@ var settings = {
 /* init */
 settings.addNeed('torrents');
 settings.addNeed('selectedTorrents');
+settings.addNeed('torrentColumns');
 
 /*** plugins hopefully ***/
 var filtersPlugin = {

@@ -165,6 +165,61 @@ App.Torrent = DS.Model.extend({
 
 });
 
+App.TorrentColumn = Ember.Object.extend({
+    name: '',
+    dataField: ''
+});
+
+App.TorrentColumnsController = Ember.ArrayController.extend({
+    columns: [
+      App.TorrentColumn.create({
+          name: 'Status',
+          dataField: 'statusString'
+      }),
+      App.TorrentColumn.create({
+          name: 'Name',
+          dataField: 'name'
+      }),
+      App.TorrentColumn.create({
+          name: 'Size',
+          dataField: 'sizeConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'Done',
+          dataField: 'percentDoneConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'DL',
+          dataField: 'downloadedConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'UL',
+          dataField: 'uploadedConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'Ratio',
+          dataField: 'ratioConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'Date added',
+          dataField: 'addedDateConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'DL Rate',
+          dataField: 'rateDownloadConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'UL Rate',
+          dataField: 'rateUploadConverted'
+      }),
+      App.TorrentColumn.create({
+          name: 'ETA',
+          dataField: 'etaConverted'
+      })
+    ]
+});
+
+
 DS.RESTAdapter.reopen({
     namespace: 'transmission'
 });

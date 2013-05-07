@@ -1,33 +1,5 @@
-<td class='status'>
-	{{unbound statusString}}
-</td>
-<td class='name'>
-	{{unbound name}}
-</td>
-<td class='size'>
-    {{unbound sizeConverted}}
-</td>
-<td class='done'>
-    {{unbound percentDoneConverted}}
-</td>
-<td class='downloaded'>
-    {{unbound downloadedConverted}}
-</td>
-<td class='uploaded'>
-    {{unbound uploadedConverted}}
-</td>
-<td class='ratio'>
-    {{unbound ratioConverted}}
-</td>
-<td class='addedDate'>
-    {{unbound addedDateConverted}}
-</td>
-<td class='rateDownload'>
-    {{unbound rateDownloadConverted}}
-</td>
-<td class='rateUpload'>
-    {{unbound rateUploadConverted}}
-</td>
-<td class='eta'>
-    {{unbound etaConverted}}
-</td>
+{{#each controller.controllers.torrentColumns.columns}}
+    <td>
+        {{torrentField dataField ..}}
+    </td>
+{{/each}}
