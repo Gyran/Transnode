@@ -71,6 +71,10 @@ App.Torrent = DS.Model.extend({
         return this.get('status') === this._STATUS_STOPPED;
     }.property('status'),
 
+    isDownloading: function () {
+        return this.get('status') === this._STATUS_DOWNLOAD;
+    }.property('status'),
+
     isSeeding: function () {
         return this.get('status') === this._STATUS_SEED;
     }.property('status'),
@@ -82,6 +86,10 @@ App.Torrent = DS.Model.extend({
     isActive: function () {
         return (this.get('rateDownload') + this.get('rateUpload')) > 0;
     }.property('rateUpload', 'rateDownload'),
+
+    isInactive: function () {
+        return !this.get('isActive');
+    }.property(),
 
     isCompleted: function () {
         return (this.get('leftUntilDone') <= 0);
@@ -276,7 +284,9 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    needs: settings.getNeedsArray()
+    needs: settings.getNeedsArray(),
+
+    leftColumnViews: settings.getLeftColumnViewsArray()
 });
 
 App.ApplicationRoute = Ember.Route.extend({

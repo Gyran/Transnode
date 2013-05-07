@@ -1,0 +1,6 @@
+<ul class='nav nav-list'>
+    <li class='nav-header'>Filters</li>
+    {{#each view.filters}}
+        {{view view.filterView contentBinding='this'}}
+    {{/each}}
+</ul>

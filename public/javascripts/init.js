@@ -1,34 +1,3 @@
-/*
-      App.TorrentColumn.create(),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      }),
-      App.TorrentColumn.create({
-          
-      })
-    ]
-    */
 var settings = {
     applicationNeeds: Ember.A(),
     plugins: Ember.A(),
@@ -50,6 +19,10 @@ var settings = {
         this.torrentColumns.pushObject(column);
     },
 
+    addLeftColumnView: function (view) {
+        this.leftColumnViews.pushObject(view);
+    },
+
     getPlugins: function () {
         return this.plugins;
     },
@@ -60,6 +33,11 @@ var settings = {
 
     getTorrentColumnsArray: function () {
         return this.torrentColumns.toArray();
+    },
+
+
+    getLeftColumnViewsArray: function () {
+        return this.leftColumnViews.toArray();
     }
 };
 
