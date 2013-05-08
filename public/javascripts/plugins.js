@@ -18,6 +18,10 @@ var filtersPlugin = {
             filter:     'isDownloading'
         }));
         filters.pushObject(App.Filter.create({
+            name:       'Seeding',
+            filter:     'isSeeding'
+        }));
+        filters.pushObject(App.Filter.create({
             name:       'Completed',
             filter:     'isCompleted'
         }));
@@ -44,18 +48,25 @@ var filtersPlugin = {
             defaultTemplate: Ember.TEMPLATES.filter,
 
             click: function (e) {
-                console.log('setting filter:', this.content.get('filter'));
-
                 var torrentsController = this.get('controller.controllers.torrents');
                 torrentsController.set('filterBy', this.content.get('filter'));
             },
 
             selected: function () {
                 var filter = this.get('controller.controllers.torrents.filterBy');
-                console.log(filter);
 
                 return (filter === this.content.get('filter'));
-            }.property('controller.controllers.torrents.filterBy').cacheable()
+            }.property('controller.controllers.torrents.filterBy'),
+
+            numTorrents: function () {
+                var torrents = this.get('controller.controllers.torrents').get('_torrents');
+                var filter = this.content.get('filter');
+                if (filter === 'none') {
+                    return torrents.get('length');    
+                } else {
+                    return torrents.filterProperty(filter).get('length');
+                }
+            }.property('controller.controllers.torrents._torrents.@each')
         });
 
         App.FiltersView = Ember.View.extend({
