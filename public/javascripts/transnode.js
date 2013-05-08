@@ -17,7 +17,7 @@ App.Store = DS.Store.extend({
     revision: 12
 });
 
-App.Torrent = DS.Model.extend({
+App.Torrent = Ember.Object.extend({
     _STATUS_STOPPED:        0,
     _STATUS_CHECK_WAIT:     1,
     _STATUS_CHECK:          2,
@@ -206,28 +206,37 @@ App.TorrentsController = Ember.ArrayController.extend({
     },
 
     execute: function () {
+        var that = this;
 
-        var torrents = App.Torrent.find();
-        if (this.get('filterBy') === 'none') {
-            this.set('_torrents', torrents);
-        } else {
-            this.set('_torrents', torrents);
-        }
+        $.getJSON('transmission/torrents', null, function (data) {
+            var torrents = Ember.A();
+
+            $.each(data.torrents, function (index, t) {
+                var torrent = App.Torrent.create(t);
+                torrents.pushObject(torrent);
+            });
+
+            that.set('_torrents', torrents);
+
+
+        });
     },
 
     torrents: function () {
-        return this.get('arrangedContent');
-    }.property('content.@each').cacheable(),
+        var torrents = this.get('arrangedContent');
+        return torrents;
+    }.property('content'),
 
     content: function () {
         var filter = this.get('filterBy');
+        var torrents = this.get('_torrents');
 
         if (filter === 'none') {
-            return this.get('_torrents');
+            return torrents;
         } else {
-            return this.get('_torrents').filterProperty(filter);
+            return torrents.filterProperty(filter);
         }
-    }.property('_torrents.@each', 'filterBy').cacheable()
+    }.property('_torrents', 'filterBy')
 
 });
 
@@ -270,12 +279,6 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
         var selected = Ember.A();
         selected.pushObject(id);
         this.set('content', selected);
-        this.update();
-    },
-
-    update: function () {
-        var torrent = App.Torrent.find(this.get('firstSelected'));
-        this.set('selectedTorrent', torrent);
     },
 
     firstSelected: function () {
