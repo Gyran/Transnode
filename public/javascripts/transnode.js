@@ -196,9 +196,9 @@ App.TorrentsController = Ember.ArrayController.extend({
         var t = this;
         t.execute();
 
-        this.timer = setInterval(function () {
+        /*this.timer = setInterval(function () {
             t.execute();
-        }, t._UPDATE_INTERVAL);
+        }, t._UPDATE_INTERVAL);*/
     },
 
     stop: function () {
@@ -265,6 +265,35 @@ App.TorrentsView = Ember.View.extend({
     classNames: 'table table-condensed table-bordered table-hover',
     torrentView: App.TorrentView,
     defaultTemplate: Ember.TEMPLATES['torrents']
+});
+
+App.DetailsTabsController = Ember.ArrayController.extend({
+    tabs: settings.getDetailsTabsArray(),
+    renderView: null
+});
+
+App.DetailsTabsView = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.detailsTabs
+});
+
+App.DetailsTabView = Ember.View.extend({
+    tagName: 'li',
+    defaultTemplate: Ember.TEMPLATES.detailsTab,
+    classNameBindings: ['selected:active'],
+
+    tab: null,
+
+    selected: function () {
+        var selectedTab = this.get('controller.controllers.detailsTabs.selectedTab');
+
+        return (selectedTab === this.tab.name);
+    }.property('controller.controllers.detailsTabs.selectedTab'),
+
+    click: function (e) {
+        var detailsTabsController = this.get('controller.controllers.detailsTabs');
+        detailsTabsController.set('renderView', this.tab.view);
+        detailsTabsController.set('selectedTab', this.tab.name);
+    }
 });
 
 App.SelectedTorrentsController = Ember.ArrayController.extend({

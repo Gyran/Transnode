@@ -8,5 +8,8 @@
 </div>
 
 <div class="row-fluid">
-	{{partial details}}
+	{{view App.DetailsTabsView 
+        contentBinding='controllers.detailsTabs.tabs'
+        renderViewBinding='controllers.detailsTabs.renderView'
+    }}
 </div>

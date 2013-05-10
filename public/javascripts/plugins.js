@@ -1,4 +1,4 @@
-/*** plugins hopefully ***/
+/*** Filterplugin ***/
 var filtersPlugin = {
     name: 'filters',
 
@@ -56,17 +56,17 @@ var filtersPlugin = {
                 var filter = this.get('controller.controllers.torrents.filterBy');
 
                 return (filter === this.content.get('filter'));
-            }.property('controller.controllers.torrents.filterBy'),
+            }.property('controller.controllers.torrents.filterBy').cacheable(),
 
             numTorrents: function () {
                 var torrents = this.get('controller.controllers.torrents').get('_torrents');
                 var filter = this.content.get('filter');
                 if (filter === 'none') {
-                    return torrents.get('length');    
+                    return torrents.get('length');
                 } else {
                     return torrents.filterProperty(filter).get('length');
                 }
-            }.property('controller.controllers.torrents._torrents.@each')
+            }.property('controller.controllers.torrents._torrents').cacheable()
         });
 
         App.FiltersView = Ember.View.extend({
@@ -78,7 +78,28 @@ var filtersPlugin = {
         settings.addLeftColumnView(App.FiltersView);
     }
 };
-settings.plugins.pushObject(filtersPlugin);
+settings.addPlugin(filtersPlugin);
+/**********************/
+
+/****** torrentdetails plugin ***/
+var torrentDetailsPlugin = {
+    name: 'Torrent Details',
+
+    init: function () {
+        App.TorrentDetailsView = Ember.View.extend({
+            defaultTemplate: Ember.TEMPLATES.torrentDetails
+        });
+
+        settings.addDetailsTab({
+            name: 'Details',
+            view: App.TorrentDetailsView
+        });
+    }
+};
+settings.addPlugin(torrentDetailsPlugin);
+/**********************/
+
+
 
 settings.plugins.forEach(function(plugin, index, e) {
     console.log('init', plugin.name);
