@@ -3,8 +3,9 @@ var settings = {
     plugins: Ember.A(),
     torrentColumns: Ember.A(),
 
+    // fields where stuff can be displayed
     leftColumnViews: Ember.A(),
-    detailsTabs: Ember.A(),
+    tabs: Ember.A(),
     toolbarViews: Ember.A(),
 
     addPlugin: function (plugin) {
@@ -23,8 +24,8 @@ var settings = {
         this.leftColumnViews.pushObject(view);
     },
 
-    addDetailsTab: function (tab) {
-        this.detailsTabs.pushObject(tab);
+    addTab: function (tab) {
+        this.tabs.pushObject(tab);
     },
 
     addToolbarView: function (view) {
@@ -47,8 +48,8 @@ var settings = {
         return this.leftColumnViews.toArray();
     },
 
-    getDetailsTabsArray: function () {
-        return this.detailsTabs.toArray();
+    getTabsArray: function () {
+        return this.tabs.toArray();
     },
 
     getToolbarViewsArray: function () {
@@ -60,7 +61,7 @@ var settings = {
 settings.addNeed('torrents');
 settings.addNeed('selectedTorrents');
 settings.addNeed('torrentColumns');
-settings.addNeed('detailsTabs');
+settings.addNeed('tabs');
 
 settings.addTorrentColumn({ name: 'Status',     dataField: 'statusString' });
 settings.addTorrentColumn({ name: 'Name',       dataField: 'name' });

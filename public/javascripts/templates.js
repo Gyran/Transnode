@@ -39,9 +39,9 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   data.buffer.push("\n	");
   data.buffer.push("\n</div>\n\n<div class=\"row-fluid\">\n	");
   hashTypes = {'contentBinding': "STRING",'renderViewBinding': "STRING"};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.DetailsTabsView", {hash:{
-    'contentBinding': ("controllers.detailsTabs.tabs"),
-    'renderViewBinding': ("controllers.detailsTabs.renderView")
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.TabsView", {hash:{
+    'contentBinding': ("controllers.tabs.tabs"),
+    'renderViewBinding': ("controllers.tabs.renderView")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
   data.buffer.push("\n</div>");
   return buffer;
@@ -74,7 +74,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   return buffer;
   
 });
-Ember.TEMPLATES["detailsTab"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["tab"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   var buffer = '', hashTypes, escapeExpression=this.escapeExpression;
@@ -87,7 +87,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   return buffer;
   
 });
-Ember.TEMPLATES["detailsTabs"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["tabs"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   var buffer = '', stack1, hashTypes, escapeExpression=this.escapeExpression, self=this;
@@ -97,7 +97,7 @@ function program1(depth0,data) {
   var buffer = '', hashTypes;
   data.buffer.push("\n    ");
   hashTypes = {'tabBinding': "ID"};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.DetailsTabView", {hash:{
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.TabView", {hash:{
     'tabBinding': ("")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
   data.buffer.push("\n");

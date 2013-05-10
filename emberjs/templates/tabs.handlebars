@@ -1,0 +1,9 @@
+<ul class='nav nav-tabs'>
+{{#each view.content}}
+    {{view App.TabView tabBinding=this}}
+{{/each}}
+</ul>
+
+{{#if view.renderView}}
+    {{view view.renderView}}
+{{/if}}

@@ -81,7 +81,7 @@ App.Torrent = Ember.Object.extend({
 
     isError: function () {
         return this.get('error') !== this._ERROR_NONE;
-    }.property('status'),
+    }.property('error'),
 
     isActive: function () {
         return (this.get('rateDownload') + this.get('rateUpload')) > 0;
@@ -267,32 +267,32 @@ App.TorrentsView = Ember.View.extend({
     defaultTemplate: Ember.TEMPLATES['torrents']
 });
 
-App.DetailsTabsController = Ember.ArrayController.extend({
-    tabs: settings.getDetailsTabsArray(),
+App.TabsController = Ember.ArrayController.extend({
+    tabs: settings.getTabsArray(),
     renderView: null
 });
 
-App.DetailsTabsView = Ember.View.extend({
-    defaultTemplate: Ember.TEMPLATES.detailsTabs
+App.TabsView = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.tabs
 });
 
-App.DetailsTabView = Ember.View.extend({
+App.TabView = Ember.View.extend({
     tagName: 'li',
-    defaultTemplate: Ember.TEMPLATES.detailsTab,
+    defaultTemplate: Ember.TEMPLATES.tab,
     classNameBindings: ['selected:active'],
 
     tab: null,
 
     selected: function () {
-        var selectedTab = this.get('controller.controllers.detailsTabs.selectedTab');
+        var selectedTab = this.get('controller.controllers.tabs.selectedTab');
 
         return (selectedTab === this.tab.name);
-    }.property('controller.controllers.detailsTabs.selectedTab'),
+    }.property('controller.controllers.tabs.selectedTab'),
 
     click: function (e) {
-        var detailsTabsController = this.get('controller.controllers.detailsTabs');
-        detailsTabsController.set('renderView', this.tab.view);
-        detailsTabsController.set('selectedTab', this.tab.name);
+        var tabsController = this.get('controller.controllers.tabs');
+        tabsController.set('renderView', this.tab.view);
+        tabsController.set('selectedTab', this.tab.name);
     }
 });
 
@@ -321,11 +321,15 @@ App.ApplicationController = Ember.Controller.extend({
     leftColumnViews: settings.getLeftColumnViewsArray()
 });
 
+console.log('pre route');
+
 App.ApplicationRoute = Ember.Route.extend({
     activate: function () {
         this.controllerFor('torrents').start();
     }
 });
+
+console.log('post route');
 
 Ember.Handlebars.registerBoundHelper('torrentField', function (field, torrent, options) {
     return options.contexts.objectAt(1).get(field);

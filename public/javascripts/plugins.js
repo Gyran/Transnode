@@ -7,7 +7,6 @@ var filtersPlugin = {
             name:       'filter',
             filter:     'none'
         });
-
         var filters = Ember.A();
         filters.pushObject(App.Filter.create({
             name:       'All',
@@ -90,7 +89,7 @@ var torrentDetailsPlugin = {
             defaultTemplate: Ember.TEMPLATES.torrentDetails
         });
 
-        settings.addDetailsTab({
+        settings.addTab({
             name: 'Details',
             view: App.TorrentDetailsView
         });
