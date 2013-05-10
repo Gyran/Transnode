@@ -232,9 +232,41 @@ function program1(depth0,data) {
 Ember.TEMPLATES["torrentDetails"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Ember.Handlebars.helpers; data = data || {};
+  var buffer = '', stack1, hashTypes, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
   
+  var buffer = '', hashTypes;
+  data.buffer.push("\n\n    <div class='progress progress-striped' \n    ");
+  hashTypes = {'class': "STRING"};
+  data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
+    'class': ("view.torrent.isDownloading:active")
+  },contexts:[],types:[],hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n        <div class='bar' ");
+  hashTypes = {'style': "STRING"};
+  data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
+    'style': ("view.progressBarStyle")
+  },contexts:[],types:[],hashTypes:hashTypes,data:data})));
+  data.buffer.push("></div>\n    </div>\n\n    ");
+  hashTypes = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "view.torrent.name", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n");
+  return buffer;
+  }
 
+function program3(depth0,data) {
+  
+  
+  data.buffer.push("\n<div class='alert'>\n    You haven't selected a Torrent\n</div>\n");
+  }
 
-  data.buffer.push("Here will be details!");
+  hashTypes = {};
+  stack1 = helpers['if'].call(depth0, "view.torrent", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n\n");
+  hashTypes = {};
+  stack1 = helpers.unless.call(depth0, "view.torrent", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  return buffer;
   
 });

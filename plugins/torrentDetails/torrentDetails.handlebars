@@ -1,1 +1,15 @@
-Here will be details!
+{{#if view.torrent}}
+
+    <div class='progress progress-striped' 
+    {{bindAttr class='view.torrent.isDownloading:active'}}>
+        <div class='bar' {{bindAttr style='view.progressBarStyle'}}></div>
+    </div>
+
+    {{view.torrent.name}}
+{{/if}}
+
+{{#unless view.torrent}}
+<div class='alert'>
+    You haven't selected a Torrent
+</div>
+{{/unless}}

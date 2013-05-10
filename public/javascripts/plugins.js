@@ -86,7 +86,17 @@ var torrentDetailsPlugin = {
 
     init: function () {
         App.TorrentDetailsView = Ember.View.extend({
-            defaultTemplate: Ember.TEMPLATES.torrentDetails
+            defaultTemplate: Ember.TEMPLATES.torrentDetails,
+
+            torrent: function () {
+                var selectedTorrent = this.get('controller.controllers.selectedTorrents.selectedTorrent');
+                return selectedTorrent;
+            }.property('controller.controllers.selectedTorrents.selectedTorrent'),
+
+            progressBarStyle: function () {
+                var percentDone = (this.get('torrent.percentDone') * 100).toFixed(0);
+                return 'width: ' + percentDone + '%;';
+            }.property('torrent.percentDone')
         });
 
         settings.addTab({
