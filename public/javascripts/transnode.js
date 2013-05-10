@@ -312,6 +312,7 @@ App.TabView = Ember.View.extend({
 
 App.SelectedTorrentsController = Ember.ArrayController.extend({
     content: Ember.A(),
+    needs: ['torrents'],
     selectedTorrent: null,
 
     addSelected: function (torrent) {
@@ -328,13 +329,21 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
     popSelected: function (torrent) {
         var selected = this.get('content');
         selected.removeObject(torrent.get('id'));
-        this.set('selectedTorrent', selected.get('firstObject'));
         this.set('content', selected);
+        this.update();
     },
 
     numSelected: function () {
         return this.get('content.length');
-    }.property('content.length')
+    }.property('content.length'),
+
+    update: function () {
+        var torrents = this.get('controllers.torrents._torrents');
+        var torrent = torrents.findProperty('id', this.get('content.firstObject'));
+
+        this.set('selectedTorrent', torrent);
+    }.observes('controllers.torrents._torrents')
+
 });
 
 App.ApplicationController = Ember.Controller.extend({
