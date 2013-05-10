@@ -247,17 +247,31 @@ App.TorrentView = Ember.View.extend({
 
     click: function (e) {
         var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
-        if (e.metaKey) {
-            selectedTorrentsController.addSelected(this.get('content.id'));
+        var torrent = this.get('content');
+
+        var numSelected = selectedTorrentsController.get('numSelected');
+
+        if (this.get('selected')) {
+            if (numSelected === 1) {
+                selectedTorrentsController.popSelected(torrent);
+            } else { // numSelected > 1
+                if (e.metaKey) {
+                    selectedTorrentsController.popSelected(torrent);
+                } else {
+                    selectedTorrentsController.setSelected(torrent);
+                }
+            }
+        } else if (e.metaKey) {
+            selectedTorrentsController.addSelected(torrent);
         } else {
-            selectedTorrentsController.setSelected(this.get('content.id'));
+            selectedTorrentsController.setSelected(torrent);
         }
     },
 
     selected: function () {
         var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
-        return (selectedTorrentsController.get('content').indexOf(this.get('content.id')) !== -1);
-    }.property('controller.controllers.selectedTorrents.@each').cacheable()
+        return selectedTorrentsController.get('content').contains(this.get('content.id'));
+        }.property('controller.controllers.selectedTorrents.@each')
 });
 
 App.TorrentsView = Ember.View.extend({
@@ -300,19 +314,27 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
     content: Ember.A(),
     selectedTorrent: null,
 
-    addSelected: function (id) {
-        this.get('content').pushObject(id);
+    addSelected: function (torrent) {
+        this.get('content').pushObject(torrent.get('id'));
     },
 
-    setSelected: function (id) {
+    setSelected: function (torrent) {
         var selected = Ember.A();
-        selected.pushObject(id);
+        selected.pushObject(torrent.get('id'));
+        this.set('selectedTorrent', torrent);
         this.set('content', selected);
     },
 
-    firstSelected: function () {
-        return this.get('content.firstObject');
-    }.property('content.firstObject')
+    popSelected: function (torrent) {
+        var selected = this.get('content');
+        selected.removeObject(torrent.get('id'));
+        this.set('selectedTorrent', selected.get('firstObject'));
+        this.set('content', selected);
+    },
+
+    numSelected: function () {
+        return this.get('content.length');
+    }.property('content.length')
 });
 
 App.ApplicationController = Ember.Controller.extend({
