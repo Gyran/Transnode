@@ -321,17 +321,19 @@ App.ApplicationController = Ember.Controller.extend({
     leftColumnViews: settings.getLeftColumnViewsArray()
 });
 
-console.log('pre route');
-
 App.ApplicationRoute = Ember.Route.extend({
     activate: function () {
         this.controllerFor('torrents').start();
     }
 });
 
-console.log('post route');
-
 Ember.Handlebars.registerBoundHelper('torrentField', function (field, torrent, options) {
     return options.contexts.objectAt(1).get(field);
 });
 
+// if plugins wants to change core functionallity
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.postLoad === 'function') {
+        plugin.postLoad();
+    }
+});

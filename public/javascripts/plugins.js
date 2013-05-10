@@ -101,7 +101,9 @@ settings.addPlugin(torrentDetailsPlugin);
 
 
 settings.plugins.forEach(function(plugin, index, e) {
-    console.log('init', plugin.name);
-    plugin.init();
+    if  (typeof plugin.init === 'function') {
+        console.log('init', plugin.name);
+        plugin.init();
+    }
 });
 
