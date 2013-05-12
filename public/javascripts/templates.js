@@ -247,10 +247,10 @@ function program1(depth0,data) {
   data.buffer.push(escapeExpression(helpers.bindAttr.call(depth0, {hash:{
     'style': ("view.progressBarStyle")
   },contexts:[],types:[],hashTypes:hashTypes,data:data})));
-  data.buffer.push("></div>\n    </div>\n\n    ");
+  data.buffer.push("></div>\n    </div>\n    <h4>\n        ");
   hashTypes = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "view.torrent.name", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n");
+  data.buffer.push("\n    </h4>\n");
   return buffer;
   }
 

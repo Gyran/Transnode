@@ -8,6 +8,9 @@ var settings = {
     tabs: Ember.A(),
     toolbarViews: Ember.A(),
 
+    // Some settings
+    defaultTab: {view: null, name: ''},
+
     addPlugin: function (plugin) {
         this.plugins.pushObject(plugin);
     },
@@ -54,6 +57,14 @@ var settings = {
 
     getToolbarViewsArray: function () {
         return this.toolbarViews.toArray();
+    },
+
+    setDefaultTab: function (tab) {
+        this.defaultTab = tab;
+    },
+
+    getDefaultTab: function () {
+        return this.defaultTab;
     }
 };
 

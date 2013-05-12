@@ -4,8 +4,9 @@
     {{bindAttr class='view.torrent.isDownloading:active'}}>
         <div class='bar' {{bindAttr style='view.progressBarStyle'}}></div>
     </div>
-
-    {{view.torrent.name}}
+    <h4>
+        {{view.torrent.name}}
+    </h4>
 {{/if}}
 
 {{#unless view.torrent}}

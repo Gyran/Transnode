@@ -83,7 +83,7 @@ settings.addPlugin(filtersPlugin);
 /****** torrentdetails plugin ***/
 var torrentDetailsPlugin = {
     name: 'Torrent Details',
-
+    tab: null,
     init: function () {
         App.TorrentDetailsView = Ember.View.extend({
             defaultTemplate: Ember.TEMPLATES.torrentDetails,
@@ -99,10 +99,13 @@ var torrentDetailsPlugin = {
             }.property('torrent.percentDone')
         });
 
-        settings.addTab({
+        this.tab = {
             name: 'Details',
             view: App.TorrentDetailsView
-        });
+        },
+
+        settings.setDefaultTab(this.tab);
+        settings.addTab(this.tab);
     }
 };
 settings.addPlugin(torrentDetailsPlugin);

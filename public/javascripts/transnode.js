@@ -283,7 +283,13 @@ App.TorrentsView = Ember.View.extend({
 
 App.TabsController = Ember.ArrayController.extend({
     tabs: settings.getTabsArray(),
-    renderView: null
+    renderView: settings.getDefaultTab().view,
+    selectedTab: settings.getDefaultTab().name,
+
+    setActiveTab: function (tab) {
+        this.set('renderView', tab.view);
+        this.set('selectedTab', tab.name);
+    }
 });
 
 App.TabsView = Ember.View.extend({
@@ -305,8 +311,7 @@ App.TabView = Ember.View.extend({
 
     click: function (e) {
         var tabsController = this.get('controller.controllers.tabs');
-        tabsController.set('renderView', this.tab.view);
-        tabsController.set('selectedTab', this.tab.name);
+        tabsController.setActiveTab(this.tab);
     }
 });
 
