@@ -1,17 +1,19 @@
-App.ToolbarButtonView = Ember.View.extend({
-    defaultTemplate: Ember.TEMPLATES.toolbarButton,
-    tagName: 'a',
-    classNames: 'btn btn-primary',
-
-    icon: 'icon-question icon-large',
-    text: ''
-});
-
+/** filter methods
+* preInit
+* postInit
+* preModels
+* postModels
+* preViews
+* postViews
+* preControllers
+* postControllers
+**********/
 /*** Filterplugin ***/
+
 var filtersPlugin = {
     name: 'filters',
 
-    init: function () {
+    preControllers: function () {
         App.Filter = Ember.Object.extend({
             name:       'filter',
             filter:     'none'
@@ -93,7 +95,7 @@ settings.addPlugin(filtersPlugin);
 var torrentDetailsPlugin = {
     name: 'Torrent Details',
     tab: null,
-    init: function () {
+    preControllers: function () {
         App.TorrentDetailsView = Ember.View.extend({
             defaultTemplate: Ember.TEMPLATES.torrentDetails,
 
@@ -160,7 +162,7 @@ var controlTorrentPlugin = {
             successFun).fail(failFun);
     },
 
-    init: function () {
+    postViews: function () {
         var that = this;
 
         App.ToolbarStarTorrentButtonView = App.ToolbarButtonView.create({
@@ -211,14 +213,7 @@ var controlTorrentPlugin = {
         settings.addToolbarButton(App.ToolbarStarTorrentButtonView);
         settings.addToolbarButton(App.ToolbarStopTorrentButtonView);
     }
-}
+};
 settings.addPlugin(controlTorrentPlugin);
 /**********************/
-
-settings.plugins.forEach(function(plugin, index, e) {
-    if  (typeof plugin.init === 'function') {
-        console.log('init', plugin.name);
-        plugin.init();
-    }
-});
 

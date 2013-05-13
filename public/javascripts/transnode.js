@@ -7,15 +7,15 @@ function bytesToSize(bytes) {
     return  (bytes / Math.pow(1024, i)).toFixed( i ? 1 : 0 ) + ' ' + sizes[ isNaN( bytes ) ? 0 : i+1 ];
 }
 
-DS.RESTSerializer.reopen({
-   keyForAttributeName: function(type, name) {
-        return name;
+/*************/
+
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.preModels === 'function') {
+        plugin.preModels();
     }
 });
 
-App.Store = DS.Store.extend({
-    revision: 12
-});
+/** models **/
 
 App.Torrent = Ember.Object.extend({
     _STATUS_STOPPED:        0,
@@ -173,13 +173,118 @@ App.Torrent = Ember.Object.extend({
 
 });
 
-App.TorrentColumnsController = Ember.ArrayController.extend({
-    columns: settings.getTorrentColumnsArray()
+/** /models **/
+
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.postModels === 'function') {
+        plugin.postModels();
+    }
+});
+
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.preViews === 'function') {
+        plugin.preViews();
+    }
+});
+
+/** views **/
+
+App.TorrentView = Ember.View.extend({
+    tagName: 'tr',
+    defaultTemplate: Ember.TEMPLATES['torrent'],
+    classNameBindings: ['selected'],
+
+    click: function (e) {
+        var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
+        var torrent = this.get('content');
+
+        var numSelected = selectedTorrentsController.get('numSelected');
+
+        if (this.get('selected')) {
+            if (numSelected === 1) {
+                selectedTorrentsController.popSelected(torrent);
+            } else { // numSelected > 1
+                if (e.metaKey) {
+                    selectedTorrentsController.popSelected(torrent);
+                } else {
+                    selectedTorrentsController.setSelected(torrent);
+                }
+            }
+        } else if (e.metaKey) {
+            selectedTorrentsController.addSelected(torrent);
+        } else {
+            selectedTorrentsController.setSelected(torrent);
+        }
+    },
+
+    selected: function () {
+        var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
+        return selectedTorrentsController.get('content').contains(this.get('content.id'));
+        }.property('controller.controllers.selectedTorrents.@each')
+});
+
+App.TorrentsView = Ember.View.extend({
+    tagName: 'table',
+    classNames: 'table table-condensed table-bordered table-hover',
+    torrentView: App.TorrentView,
+    defaultTemplate: Ember.TEMPLATES['torrents']
+});
+
+App.TabsView = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.tabs
+});
+
+App.ToolbarView = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.toolbar
+});
+
+App.TabView = Ember.View.extend({
+    tagName: 'li',
+    defaultTemplate: Ember.TEMPLATES.tab,
+    classNameBindings: ['selected:active'],
+
+    tab: null,
+
+    selected: function () {
+        var selectedTab = this.get('controller.controllers.tabs.selectedTab');
+
+        return (selectedTab === this.tab.name);
+    }.property('controller.controllers.tabs.selectedTab'),
+
+    click: function (e) {
+        var tabsController = this.get('controller.controllers.tabs');
+        tabsController.setActiveTab(this.tab);
+    }
+});
+
+App.ToolbarButtonView = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.toolbarButton,
+    tagName: 'a',
+    classNames: 'btn btn-primary',
+
+    icon: 'icon-question icon-large',
+    text: ''
+});
+
+/** /views **/
+
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.postViews === 'function') {
+        plugin.postViews();
+    }
+});
+
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.preControllers === 'function') {
+        plugin.preControllers();
+    }
 });
 
 
-DS.RESTAdapter.reopen({
-    namespace: 'transmission'
+/** controllers **/
+
+App.TorrentColumnsController = Ember.ArrayController.extend({
+    columns: settings.getTorrentColumnsArray()
 });
 
 App.TorrentsController = Ember.ArrayController.extend({
@@ -240,47 +345,6 @@ App.TorrentsController = Ember.ArrayController.extend({
 
 });
 
-App.TorrentView = Ember.View.extend({
-    tagName: 'tr',
-    defaultTemplate: Ember.TEMPLATES['torrent'],
-    classNameBindings: ['selected'],
-
-    click: function (e) {
-        var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
-        var torrent = this.get('content');
-
-        var numSelected = selectedTorrentsController.get('numSelected');
-
-        if (this.get('selected')) {
-            if (numSelected === 1) {
-                selectedTorrentsController.popSelected(torrent);
-            } else { // numSelected > 1
-                if (e.metaKey) {
-                    selectedTorrentsController.popSelected(torrent);
-                } else {
-                    selectedTorrentsController.setSelected(torrent);
-                }
-            }
-        } else if (e.metaKey) {
-            selectedTorrentsController.addSelected(torrent);
-        } else {
-            selectedTorrentsController.setSelected(torrent);
-        }
-    },
-
-    selected: function () {
-        var selectedTorrentsController = this.get('controller.controllers.selectedTorrents');
-        return selectedTorrentsController.get('content').contains(this.get('content.id'));
-        }.property('controller.controllers.selectedTorrents.@each')
-});
-
-App.TorrentsView = Ember.View.extend({
-    tagName: 'table',
-    classNames: 'table table-condensed table-bordered table-hover',
-    torrentView: App.TorrentView,
-    defaultTemplate: Ember.TEMPLATES['torrents']
-});
-
 App.TabsController = Ember.ArrayController.extend({
     tabs: settings.getTabsArray(),
     renderView: settings.getDefaultTab().view,
@@ -292,35 +356,8 @@ App.TabsController = Ember.ArrayController.extend({
     }
 });
 
-App.TabsView = Ember.View.extend({
-    defaultTemplate: Ember.TEMPLATES.tabs
-});
-
-App.ToolbarView = Ember.View.extend({
-    defaultTemplate: Ember.TEMPLATES.toolbar,
-});
-
 App.ToolbarController = Ember.ArrayController.extend({
     buttons: settings.getToolbarButtonsArray()
-});
-
-App.TabView = Ember.View.extend({
-    tagName: 'li',
-    defaultTemplate: Ember.TEMPLATES.tab,
-    classNameBindings: ['selected:active'],
-
-    tab: null,
-
-    selected: function () {
-        var selectedTab = this.get('controller.controllers.tabs.selectedTab');
-
-        return (selectedTab === this.tab.name);
-    }.property('controller.controllers.tabs.selectedTab'),
-
-    click: function (e) {
-        var tabsController = this.get('controller.controllers.tabs');
-        tabsController.setActiveTab(this.tab);
-    }
 });
 
 App.SelectedTorrentsController = Ember.ArrayController.extend({
@@ -365,19 +402,28 @@ App.ApplicationController = Ember.Controller.extend({
     leftColumnViews: settings.getLeftColumnViewsArray()
 });
 
+/** /controllers **/
+
+settings.plugins.forEach(function(plugin, index, e) {
+    if  (typeof plugin.postControllers === 'function') {
+        plugin.postControllers();
+    }
+});
+
+/** routes **/
+
 App.ApplicationRoute = Ember.Route.extend({
     activate: function () {
         this.controllerFor('torrents').start();
     }
 });
 
+/** /routes **/
+
+/** helpers **/
+
 Ember.Handlebars.registerBoundHelper('torrentField', function (field, torrent, options) {
     return options.contexts.objectAt(1).get(field);
 });
 
-// if plugins wants to change core functionallity
-settings.plugins.forEach(function(plugin, index, e) {
-    if  (typeof plugin.postLoad === 'function') {
-        plugin.postLoad();
-    }
-});
+/** /helpers **/
