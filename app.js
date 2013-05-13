@@ -7,35 +7,54 @@ var express = require('express')
 
 var app = express();
 
-var auth = '';
-var transmission = new transmissionRpc('http://example.com', auth);
+var transmission = new transmissionRpc('http://localhost:9091', null);
 
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.logger("dev"));
+app.use(express.bodyParser());
 app.use(express.compress());
 app.use(minify());
-app.use(express.static(path.join(__dirname, 'public')));
 
-var torrentsRoute = function (req, res) {
-    ids = null;
-
-    console.log(req.params.id);
-
-    if (req.params.id) {
-        ids = parseInt(req.params.id, 10);
-    }
-
-    transmission.torrentGet(ids, null, null, function (error, result) {
+app.get('/transmission/torrents', function (req, res) {
+    transmission.torrentGet(null, null, null, function (error, result) {
         if (!error) {
             res.end(JSON.stringify(result));
         } else {
-            console.log(error);
+            console.log("torrentsRoute error:", error);
         }
     });
-};
+});
 
-app.get('/transmission/torrents', torrentsRoute);
-app.get('/transmission/torrents/:id', torrentsRoute);
+// TODO should be moved to a plugin
+app.post('/transmission/torrents/start', function (req, res) {
+    ids = req.body.ids.map(function (id) {
+         return parseInt(id, 10);
+    });
+
+    transmission.torrentStart(ids, null, function (error, result) {
+        if (!error) {
+            res.end(JSON.stringify(result));
+        } else {
+            console.log("torrentsStart error:", error);
+        }
+    });
+});
+
+app.post('/transmission/torrents/stop', function (req, res) {
+    ids = req.body.ids.map(function (id) {
+         return parseInt(id, 10);
+    });
+
+    transmission.torrentStop(ids, null, function (error, result) {
+        if (!error) {
+            res.end(JSON.stringify(result));
+        } else {
+            console.log("torrentsStop error:", error);
+        }
+    });
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);
 

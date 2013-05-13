@@ -11,3 +11,6 @@ body {
 #torrentListContainer table tr.selected {
   background-color: #f5f5f5;
 }
+#toolbar {
+  padding: 5px 0;
+}

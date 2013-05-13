@@ -6,7 +6,7 @@ var settings = {
     // fields where stuff can be displayed
     leftColumnViews: Ember.A(),
     tabs: Ember.A(),
-    toolbarViews: Ember.A(),
+    toolbarButtons: Ember.A(),
 
     // Some settings
     defaultTab: {view: null, name: ''},
@@ -31,8 +31,8 @@ var settings = {
         this.tabs.pushObject(tab);
     },
 
-    addToolbarView: function (view) {
-        this.toolbarViews.pushObject(view);
+    addToolbarButton: function (button) {
+        this.toolbarButtons.pushObject(button);
     },
 
     getPlugins: function () {
@@ -55,8 +55,8 @@ var settings = {
         return this.tabs.toArray();
     },
 
-    getToolbarViewsArray: function () {
-        return this.toolbarViews.toArray();
+    getToolbarButtonsArray: function () {
+        return this.toolbarButtons.toArray();
     },
 
     setDefaultTab: function (tab) {
@@ -73,6 +73,7 @@ settings.addNeed('torrents');
 settings.addNeed('selectedTorrents');
 settings.addNeed('torrentColumns');
 settings.addNeed('tabs');
+settings.addNeed('toolbar');
 
 settings.addTorrentColumn({ name: 'Status',     dataField: 'statusString' });
 settings.addTorrentColumn({ name: 'Name',       dataField: 'name' });

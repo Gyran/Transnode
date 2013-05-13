@@ -196,9 +196,9 @@ App.TorrentsController = Ember.ArrayController.extend({
         var t = this;
         t.execute();
 
-        /*this.timer = setInterval(function () {
+        this.timer = setInterval(function () {
             t.execute();
-        }, t._UPDATE_INTERVAL);*/
+        }, t._UPDATE_INTERVAL);
     },
 
     stop: function () {
@@ -294,6 +294,14 @@ App.TabsController = Ember.ArrayController.extend({
 
 App.TabsView = Ember.View.extend({
     defaultTemplate: Ember.TEMPLATES.tabs
+});
+
+App.ToolbarView = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.toolbar,
+});
+
+App.ToolbarController = Ember.ArrayController.extend({
+    buttons: settings.getToolbarButtonsArray()
 });
 
 App.TabView = Ember.View.extend({
