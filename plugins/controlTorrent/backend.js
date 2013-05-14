@@ -3,29 +3,29 @@ var plugin = require('../../transnodePlugin');
 
 var controlTorrentPlugin = new plugin('Control Torrent');
 
-var startTorrentEntrance = {
-    verb:   'post',
-    path:   '/transmission/torrents/start',
-    cb:     function (req, res) {
-                ids = req.body.ids.map(function (id) {
-                    return parseInt(id, 10);
-                });
+var startTorrentEntrance = new plugin.Entrance(
+    'post',
+    '/transmission/torrents/start',
+    function (req, res) {
+        ids = req.body.ids.map(function (id) {
+            return parseInt(id, 10);
+        });
 
-                transmission.torrentStart(ids, null, function (error, result) {
-                    if (!error) {
-                        res.end(JSON.stringify(result));
-                    } else {
-                        console.log("torrentsStart error:", error);
-                    }
-            });
+        transmission.torrentStart(ids, null, function (error, result) {
+            if (!error) {
+                res.end(JSON.stringify(result));
+            } else {
+                console.log("torrentsStart error:", error);
+            }
+        });
     }
-};
+);
 controlTorrentPlugin.addEntrance(startTorrentEntrance);
 
-var stopTorrentEntrance = {
-    verb:   'post',
-    path:   '/transmission/torrents/stop',
-    cb:     function (req, res) {
+var stopTorrentEntrance = new plugin.Entrance(
+    'post',
+    '/transmission/torrents/stop',
+    function (req, res) {
         ids = req.body.ids.map(function (id) {
              return parseInt(id, 10);
         });
@@ -38,8 +38,9 @@ var stopTorrentEntrance = {
             }
         });
     }
-};
+);
 controlTorrentPlugin.addEntrance(stopTorrentEntrance);
+
 /**********************/
 
 module.exports = controlTorrentPlugin;
