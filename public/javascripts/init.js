@@ -28,20 +28,6 @@ var App = Ember.Application.create({
     LOG_TRANSITIONS: true
 });
 
-DS.RESTSerializer.reopen({
-   keyForAttributeName: function(type, name) {
-        return name;
-    }
-});
-
-App.Store = DS.Store.extend({
-    revision: 12
-});
-
-DS.RESTAdapter.reopen({
-    namespace: 'transmission'
-});
-
 settings.plugins.forEach(function(plugin, index, e) {
     if  (typeof plugin.postInit === 'function') {
         plugin.postInit();
