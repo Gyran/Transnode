@@ -24,10 +24,6 @@ var torrentDetailsPlugin = {
 
         settings.setDefaultTab(this.tab);
         settings.addTab(this.tab);
-        settings.addTab(this.tab = {
-            name: 'Details2',
-            view: App.TorrentDetailsView
-        });
     }
 };
 settings.addPlugin(torrentDetailsPlugin);
