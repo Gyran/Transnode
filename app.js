@@ -1,10 +1,12 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
+  , fs = require('fs')
   , minify = require('express-minify')
-  , transmissionRpc = require('../node-transmission-rpc/lib/transmission-rpc');
+  , transmissionRpc = require('../node-transmission-rpc/lib/transmission-rpc')
+  , config = require('./config');
 
-transmission = new transmissionRpc('http://localhost:9091', null); // global transmission object
+transmission = new transmissionRpc(config.transmission.host, config.transmission.auth); // global transmission object
 
 settings = {
     entrances: [],
@@ -24,14 +26,13 @@ settings = {
     }
 };
 
-var plugins = [
-    'controlTorrent'
-];
-
-plugins.forEach(function (pluginName) {
-    // load each plugin
-    var plugin = require('./plugins/' + pluginName + '/backend');
-    console.log('PLUGIN', 'loaded', plugin.name);
+// load backend plugins
+config.plugins.forEach(function (pluginName) {
+    var pluginPath = './plugins/' + pluginName + '/backend';
+    if (fs.existsSync(pluginPath + '.js'))  {
+        var plugin = require(pluginPath);
+        console.log('PLUGIN', 'loaded', plugin.name);
+    }
 });
 
 var getTorrentsEntrance = {
@@ -64,8 +65,7 @@ settings.getEntrances().forEach(function (entrance) {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.set('port', process.env.PORT || 3000);
+app.set('port', config.port);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
