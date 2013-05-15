@@ -1,5 +1,5 @@
 /******** control torrent plugin *****/
-var plugin = require('../../transnodePlugin');
+var plugin = require('../transnodeBackendPlugin');
 
 var controlTorrentPlugin = new plugin('Control Torrent');
 
