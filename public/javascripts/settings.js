@@ -11,6 +11,12 @@ var settings = {
     // Some settings
     defaultTab: {view: null, name: ''},
 
+    // Set
+    setDefaultTab: function (tab) {
+        this.defaultTab = tab;
+    },
+
+    // Add
     addPlugin: function (plugin) {
         this.plugins.pushObject(plugin);
     },
@@ -35,6 +41,7 @@ var settings = {
         this.toolbarButtons.pushObject(button);
     },
 
+    // Get
     getPlugins: function () {
         return this.plugins;
     },
@@ -57,10 +64,6 @@ var settings = {
 
     getToolbarButtonsArray: function () {
         return this.toolbarButtons.toArray();
-    },
-
-    setDefaultTab: function (tab) {
-        this.defaultTab = tab;
     },
 
     getDefaultTab: function () {

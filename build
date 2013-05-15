@@ -1,4 +1,4 @@
 #!/bin/sh
 
 ember-precompile emberjs/templates/*.handlebars plugins/*/*.handlebars -f public/javascripts/templates.js
-cat plugins/*/frontend.js > public/javascripts/plugins.js
+cat plugins/transnodeFrontendPlugin.js plugins/*/frontend.js > public/javascripts/plugins.js

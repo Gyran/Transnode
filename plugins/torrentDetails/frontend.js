@@ -1,9 +1,9 @@
 /****** torrentdetails plugin ***/
-var torrentDetailsPlugin = {
-    name: 'Torrent Details',
-    tab: null,
-    preControllers: function () {
-        App.TorrentDetailsView = Ember.View.extend({
+var torrentDetailsPlugin = new transnodeFrontendPlugin('Torrent Details');
+torrentDetailsPlugin.tab = null;
+
+torrentDetailsPlugin.preControllers = function () {
+    App.TorrentDetailsView = Ember.View.extend({
             defaultTemplate: Ember.TEMPLATES.torrentDetails,
 
             torrent: function () {
@@ -22,9 +22,7 @@ var torrentDetailsPlugin = {
             view: App.TorrentDetailsView
         },
 
-        settings.setDefaultTab(this.tab);
-        settings.addTab(this.tab);
-    }
+        this.setDefaultTab(this.tab);
+        this.addTab(this.tab);
 };
-settings.addPlugin(torrentDetailsPlugin);
 /**********************/

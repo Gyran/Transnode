@@ -1,183 +1,218 @@
-/******** control torrent plugin *****/
-var controlTorrentPlugin = {
-    name: 'Control torrent',
+function transnodeFrontendPlugin (name) {
+    this.name = name;
 
-    startTorrents: function (ids, cb) {
-        var successFun = function (data) {
-            cb();
-        };
+    this.addPlugin(this);
+}
 
-        var failFun = function () {
-            cb(true);
-        };
+// hooks
+transnodeFrontendPlugin.prototype.preInit = function() {};
+transnodeFrontendPlugin.prototype.postInit = function() {};
+transnodeFrontendPlugin.prototype.preModels = function() {};
+transnodeFrontendPlugin.prototype.postModels = function() {};
+transnodeFrontendPlugin.prototype.preViews = function() {};
+transnodeFrontendPlugin.prototype.postViews = function() {};
+transnodeFrontendPlugin.prototype.preControllers = function() {};
+transnodeFrontendPlugin.prototype.postControllers = function() {};
 
-        if (ids.get('length') <= 0) {
-            cb(true);
-        }
-
-        $.post('transmission/torrents/start',
-            { 'ids': ids.toArray() },
-            successFun).fail(failFun);
-    },
-
-    stopTorrents: function (ids, cb) {
-        var successFun = function (data) {
-            cb();
-        };
-
-        var failFun = function () {
-            cb(true);
-        };
-
-        if (ids.get('length') <= 0) {
-            cb(true);
-        }
-
-        $.post('transmission/torrents/stop',
-            { 'ids': ids.toArray() },
-            successFun).fail(failFun);
-    },
-
-    postViews: function () {
-        var that = this;
-
-        App.ToolbarStarTorrentButtonView = App.ToolbarButtonView.create({
-            icon: 'icon-play icon-large',
-            text: 'Start',
-
-            click: function (e) {
-                var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
-
-                if (selectedTorrents.get('length') <= 0) {
-                    alert('Du måste välja en torrent först');
-                } else {
-                    that.startTorrents(selectedTorrents, function (err) {
-                        if (!err) {
-                            console.log('done!');
-                        } else {
-                            console.log('error!');
-                        }
-                    });
-                }
-            }
-
-        });
-
-        App.ToolbarStopTorrentButtonView = App.ToolbarButtonView.create({
-            icon: 'icon-stop icon-large',
-            text: 'Stop',
-
-            click: function (e) {
-                var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
-
-                if (selectedTorrents.get('length') <= 0) {
-                    alert('Du måste välja en torrent först');
-                } else {
-                    that.stopTorrents(selectedTorrents, function (err) {
-                        if (!err) {
-                            console.log('done!');
-                        } else {
-                            console.log('error!');
-                        }
-                    });
-                }
-            }
-
-        });
-
-
-        settings.addToolbarButton(App.ToolbarStarTorrentButtonView);
-        settings.addToolbarButton(App.ToolbarStopTorrentButtonView);
-    }
+// methods
+transnodeFrontendPlugin.prototype.addPlugin = function(plugin) {
+    settings.addPlugin(plugin);
 };
-settings.addPlugin(controlTorrentPlugin);
+
+transnodeFrontendPlugin.prototype.addNeed = function(need) {
+    settings.addNeed(need);
+};
+
+transnodeFrontendPlugin.prototype.addTorrentColumn = function(column) {
+    settings.addTorrentColumn(column);
+};
+
+transnodeFrontendPlugin.prototype.addLeftColumnView = function(view) {
+    settings.addLeftColumnView(view);
+};
+
+transnodeFrontendPlugin.prototype.addTab = function(tab) {
+    settings.addTab(tab);
+};
+
+transnodeFrontendPlugin.prototype.addToolbarButton = function(button) {
+    settings.addToolbarButton(button);
+};
+
+transnodeFrontendPlugin.prototype.setDefaultTab = function(tab) {
+    settings.setDefaultTab(tab);
+};/******** control torrent plugin *****/
+var controlTorrentPlugin = new transnodeFrontendPlugin('Control Torrent');
+controlTorrentPlugin.startTorrents = function (ids, cb) {
+    var successFun = function (data) {
+        cb();
+    };
+
+    var failFun = function () {
+        cb(true);
+    };
+
+    if (ids.get('length') <= 0) {
+        cb(true);
+    }
+
+    $.post('transmission/torrents/start',
+        { 'ids': ids.toArray() },
+        successFun).fail(failFun);
+};
+
+controlTorrentPlugin.stopTorrents = function (ids, cb) {
+    var successFun = function (data) {
+        cb();
+    };
+
+    var failFun = function () {
+        cb(true);
+    };
+
+    if (ids.get('length') <= 0) {
+        cb(true);
+    }
+
+    $.post('transmission/torrents/stop',
+        { 'ids': ids.toArray() },
+        successFun).fail(failFun);
+};
+
+controlTorrentPlugin.postViews = function () {
+    var that = this;
+
+    App.ToolbarStarTorrentButtonView = App.ToolbarButtonView.create({
+        icon: 'icon-play icon-large',
+        text: 'Start',
+
+        click: function (e) {
+            var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
+
+            if (selectedTorrents.get('length') <= 0) {
+                alert('Du måste välja en torrent först');
+            } else {
+                that.startTorrents(selectedTorrents, function (err) {
+                    if (!err) {
+                        console.log('done!');
+                    } else {
+                        console.log('error!');
+                    }
+                });
+            }
+        }
+
+    });
+
+    App.ToolbarStopTorrentButtonView = App.ToolbarButtonView.create({
+        icon: 'icon-stop icon-large',
+        text: 'Stop',
+
+        click: function (e) {
+            var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
+
+            if (selectedTorrents.get('length') <= 0) {
+                alert('Du måste välja en torrent först');
+            } else {
+                that.stopTorrents(selectedTorrents, function (err) {
+                    if (!err) {
+                        console.log('done!');
+                    } else {
+                        console.log('error!');
+                    }
+                });
+            }
+        }
+
+    });
+
+
+    this.addToolbarButton(App.ToolbarStarTorrentButtonView);
+    this.addToolbarButton(App.ToolbarStopTorrentButtonView);
+};
 /**********************//*** Filterplugin ***/
 
-var filtersPlugin = {
-    name: 'filters',
+var filtersPlugin = new transnodeFrontendPlugin('Filters');
+filtersPlugin.preControllers = function () {
+    App.Filter = Ember.Object.extend({
+        name:       'filter',
+        filter:     'none'
+    });
+    var filters = Ember.A();
+    filters.pushObject(App.Filter.create({
+        name:       'All',
+        filter:     'none'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Downloading',
+        filter:     'isDownloading'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Seeding',
+        filter:     'isSeeding'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Completed',
+        filter:     'isCompleted'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Active',
+        filter:     'isActive'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Inactive',
+        filter:     'isInactive'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Stopped',
+        filter:     'isStopped'
+    }));
+    filters.pushObject(App.Filter.create({
+        name:       'Error',
+        filter:     'isError'
+    }));
 
-    preControllers: function () {
-        App.Filter = Ember.Object.extend({
-            name:       'filter',
-            filter:     'none'
-        });
-        var filters = Ember.A();
-        filters.pushObject(App.Filter.create({
-            name:       'All',
-            filter:     'none'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Downloading',
-            filter:     'isDownloading'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Seeding',
-            filter:     'isSeeding'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Completed',
-            filter:     'isCompleted'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Active',
-            filter:     'isActive'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Inactive',
-            filter:     'isInactive'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Stopped',
-            filter:     'isStopped'
-        }));
-        filters.pushObject(App.Filter.create({
-            name:       'Error',
-            filter:     'isError'
-        }));
+    App.FilterView = Ember.View.extend({
+        classNameBindings: ['selected:active'],
+        tagName: 'li',
+        defaultTemplate: Ember.TEMPLATES.filter,
 
-        App.FilterView = Ember.View.extend({
-            classNameBindings: ['selected:active'],
-            tagName: 'li',
-            defaultTemplate: Ember.TEMPLATES.filter,
+        click: function (e) {
+            var torrentsController = this.get('controller.controllers.torrents');
+            torrentsController.set('filterBy', this.content.get('filter'));
+        },
 
-            click: function (e) {
-                var torrentsController = this.get('controller.controllers.torrents');
-                torrentsController.set('filterBy', this.content.get('filter'));
-            },
+        selected: function () {
+            var filter = this.get('controller.controllers.torrents.filterBy');
 
-            selected: function () {
-                var filter = this.get('controller.controllers.torrents.filterBy');
+            return (filter === this.content.get('filter'));
+        }.property('controller.controllers.torrents.filterBy').cacheable(),
 
-                return (filter === this.content.get('filter'));
-            }.property('controller.controllers.torrents.filterBy').cacheable(),
+        numTorrents: function () {
+            var torrents = this.get('controller.controllers.torrents').get('_torrents');
+            var filter = this.content.get('filter');
+            if (filter === 'none') {
+                return torrents.get('length');
+            } else {
+                return torrents.filterProperty(filter).get('length');
+            }
+        }.property('controller.controllers.torrents._torrents').cacheable()
+    });
 
-            numTorrents: function () {
-                var torrents = this.get('controller.controllers.torrents').get('_torrents');
-                var filter = this.content.get('filter');
-                if (filter === 'none') {
-                    return torrents.get('length');
-                } else {
-                    return torrents.filterProperty(filter).get('length');
-                }
-            }.property('controller.controllers.torrents._torrents').cacheable()
-        });
+    App.FiltersView = Ember.View.extend({
+        defaultTemplate: Ember.TEMPLATES.filters,
+        filters: filters,
+        filterView: App.FilterView
+    });
 
-        App.FiltersView = Ember.View.extend({
-            defaultTemplate: Ember.TEMPLATES.filters,
-            filters: filters,
-            filterView: App.FilterView
-        });
-
-        settings.addLeftColumnView(App.FiltersView);
-    }
+    settings.addLeftColumnView(App.FiltersView);
 };
-settings.addPlugin(filtersPlugin);
 /**********************//****** torrentdetails plugin ***/
-var torrentDetailsPlugin = {
-    name: 'Torrent Details',
-    tab: null,
-    preControllers: function () {
-        App.TorrentDetailsView = Ember.View.extend({
+var torrentDetailsPlugin = new transnodeFrontendPlugin('Torrent Details');
+torrentDetailsPlugin.tab = null;
+
+torrentDetailsPlugin.preControllers = function () {
+    App.TorrentDetailsView = Ember.View.extend({
             defaultTemplate: Ember.TEMPLATES.torrentDetails,
 
             torrent: function () {
@@ -196,13 +231,7 @@ var torrentDetailsPlugin = {
             view: App.TorrentDetailsView
         },
 
-        settings.setDefaultTab(this.tab);
-        settings.addTab(this.tab);
-        settings.addTab(this.tab = {
-            name: 'Details2',
-            view: App.TorrentDetailsView
-        });
-    }
+        this.setDefaultTab(this.tab);
+        this.addTab(this.tab);
 };
-settings.addPlugin(torrentDetailsPlugin);
 /**********************/
