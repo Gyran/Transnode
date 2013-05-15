@@ -6,6 +6,8 @@ var express = require('express')
   , transmissionRpc = require('../node-transmission-rpc/lib/transmission-rpc')
   , config = require('./config');
 
+var entrance = require('./entrance');
+
 transmission = new transmissionRpc(config.transmission.host, config.transmission.auth); // global transmission object
 
 settings = {
@@ -26,19 +28,26 @@ settings = {
     }
 };
 
-// load backend plugins
+var frontendPlugins = fs.readFileSync('./plugins/transnodeFrontendPlugin.js', 'utf-8');
+// load plugins
 config.plugins.forEach(function (pluginName) {
-    var pluginPath = './plugins/' + pluginName + '/backend';
-    if (fs.existsSync(pluginPath + '.js'))  {
-        var plugin = require(pluginPath);
-        console.log('PLUGIN', 'loaded', plugin.name);
-    }
-});
+    var pluginPath = './plugins/' + pluginName + '/';
+    var plugin = require(pluginPath + 'plugin.js');
 
-var getTorrentsEntrance = {
-    verb:   'get',
-    path:   '/transmission/torrents',
-    cb:     function (req, res) {
+    // frontend plugins
+    if (plugin.hasFrontend)  {
+        frontendPlugins += fs.readFileSync(pluginPath + 'frontend.js', 'utf-8');
+    }
+
+    console.log('PLUGIN', 'loaded', plugin.name);
+});
+// write frontend plugins file
+fs.writeFileSync('./public/javascripts/plugins.js', frontendPlugins, 'utf-8');
+
+var getTorrentsEntrance = new entrance (
+    'get',
+    '/transmission/torrents',
+    function (req, res) {
         transmission.torrentGet(null, null, null, function (error, result) {
             if (!error) {
                 res.end(JSON.stringify(result));
@@ -47,7 +56,7 @@ var getTorrentsEntrance = {
             }
         });
     }
-};
+);
 settings.addEntrance(getTorrentsEntrance);
 
 var app = express();
@@ -55,8 +64,8 @@ var app = express();
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.logger("dev"));
 app.use(express.bodyParser());
-app.use(express.compress());
-app.use(minify());
+//app.use(express.compress());
+//app.use(minify());
 
 settings.getEntrances().forEach(function (entrance) {
     app[entrance.verb](entrance.path, entrance.cb);

@@ -6,10 +6,6 @@ transnodeBackendPlugin.prototype.addEntrance = function (entrance) {
     settings.addEntrance(entrance);
 };
 
-transnodeBackendPlugin.Entrance = function (verb, path, callback) {
-    this.verb = verb;
-    this.path = path;
-    this.cb = callback;
-};
+transnodeBackendPlugin.entrance = require('../entrance.js');
 
 module.exports = transnodeBackendPlugin;
