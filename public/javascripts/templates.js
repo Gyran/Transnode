@@ -14,7 +14,7 @@ function program1(depth0,data) {
   }
 
   hashTypes = {};
-  stack1 = helpers.each.call(depth0, "leftColumnViews", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  stack1 = helpers.each.call(depth0, "controllers.leftColumn.views", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n");
   return buffer;
@@ -72,7 +72,67 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   hashTypes = {};
   options = {hash:{},contexts:[depth0],types:["STRING"],hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.partial),stack1 ? stack1.call(depth0, "rightColumn", options) : helperMissing.call(depth0, "partial", "rightColumn", options))));
-  data.buffer.push("\n		</div>\n	</div>\n</div>");
+  data.buffer.push("\n		</div>\n	</div>\n</div>\n");
+  hashTypes = {};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.SelectFolder", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  return buffer;
+  
+});
+Ember.TEMPLATES["selectFolder"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Ember.Handlebars.helpers; data = data || {};
+  var buffer = '', stack1, hashTypes, escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = '', stack1, hashTypes;
+  data.buffer.push("\n    <div class='popover bottom fade in' style='display: block;'>\n        <div class='arrow'></div>\n        <div class='popover-content'>\n            <ul class='unstyled'>\n                ");
+  hashTypes = {};
+  stack1 = helpers.unless.call(depth0, "view.folders", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n                ");
+  hashTypes = {};
+  stack1 = helpers.each.call(depth0, "view.folders", {hash:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+  data.buffer.push("\n            </ul>\n        </div>\n    </div>\n");
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  
+  data.buffer.push("\n                    Loading...\n                ");
+  }
+
+function program4(depth0,data) {
+  
+  var buffer = '', hashTypes;
+  data.buffer.push("\n                    <li ");
+  hashTypes = {'target': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "setFolder", "name", {hash:{
+    'target': ("view")
+  },contexts:[depth0,depth0],types:["ID","ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push(">\n                        ");
+  hashTypes = {};
+  data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n                    </li>\n                ");
+  return buffer;
+  }
+
+  data.buffer.push("<div class=\"input-prepend input-append\">\n  <span class=\"add-on\"><i class='icon-folder-open-alt'></i></span>\n  ");
+  hashTypes = {'valueBinding': "STRING",'classNames': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'valueBinding': ("view.folder"),
+    'classNames': ("input-medium")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n  <button class=\"btn\" type=\"button\" ");
+  hashTypes = {'target': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "browse", {hash:{
+    'target': ("view")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push(">...</button>\n</div>\n");
+  hashTypes = {};
+  stack1 = helpers['if'].call(depth0, "view.isBrowsing", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   return buffer;
   
 });
@@ -225,6 +285,31 @@ function program3(depth0,data) {
   stack1 = helpers.each.call(depth0, "view.content", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("\n</tbody>\n");
+  return buffer;
+  
+});
+Ember.TEMPLATES["AddTorrent"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Ember.Handlebars.helpers; data = data || {};
+  var buffer = '', hashTypes, escapeExpression=this.escapeExpression;
+
+
+  data.buffer.push("<div class='arrow'></div>\n<h3 class='popover-title'>Add Torrent</h3>\n<div class='popover-content'>\n    ");
+  hashTypes = {'folder': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.SelectFolder", {hash:{
+    'folder': ("/bla")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n    ");
+  hashTypes = {'placeholder': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
+    'placeholder': ("URL")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n\n    <button ");
+  hashTypes = {'target': "STRING"};
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "addTorrent", {hash:{
+    'target': ("App.AddTorrentController")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push(">Add Torrent</button>\n</div>");
   return buffer;
   
 });

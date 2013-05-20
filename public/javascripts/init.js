@@ -10,6 +10,7 @@ settings.addNeed('selectedTorrents');
 settings.addNeed('torrentColumns');
 settings.addNeed('tabs');
 settings.addNeed('toolbar');
+settings.addNeed('leftColumn');
 
 settings.addTorrentColumn({ name: 'Status',     dataField: 'statusString' });
 settings.addTorrentColumn({ name: 'Name',       dataField: 'name' });

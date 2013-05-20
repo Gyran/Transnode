@@ -411,6 +411,10 @@ App.ToolbarController = Ember.ArrayController.extend({
     buttons: settings.getToolbarButtonsArray()
 });
 
+App.LeftColumnController = Ember.ArrayController.extend({
+    views: settings.getLeftColumnViewsArray() 
+});
+
 App.SelectedTorrentsController = Ember.ArrayController.extend({
     content: Ember.A(),
     needs: ['torrents'],
@@ -448,9 +452,7 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    needs: settings.getNeedsArray(),
-
-    leftColumnViews: settings.getLeftColumnViewsArray()
+    needs: settings.getNeedsArray()
 });
 
 /** /controllers **/
