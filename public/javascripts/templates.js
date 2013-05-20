@@ -86,7 +86,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashTypes;
-  data.buffer.push("\n    <div class='popover bottom fade in' style='display: block;'>\n        <div class='arrow'></div>\n        <div class='popover-content'>\n            <ul class='unstyled'>\n                ");
+  data.buffer.push("\n    <div id='folders' class='popover bottom fade in' style='display:block;'>\n        <div class='arrow'></div>\n        <div class='popover-content'>\n            <ul class='unstyled'>\n                ");
   hashTypes = {};
   stack1 = helpers.unless.call(depth0, "view.folders", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
@@ -124,12 +124,12 @@ function program4(depth0,data) {
     'valueBinding': ("view.folder"),
     'classNames': ("input-medium")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n  <button class=\"btn\" type=\"button\" ");
+  data.buffer.push("\n  <button id='browse' class=\"btn\" type=\"button\" ");
   hashTypes = {'target': "STRING"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "browse", {hash:{
     'target': ("view")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push(">...</button>\n</div>\n");
+  data.buffer.push(">...</button>\n</div>\n\n");
   hashTypes = {};
   stack1 = helpers['if'].call(depth0, "view.isBrowsing", {hash:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }

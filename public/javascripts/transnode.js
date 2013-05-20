@@ -268,6 +268,7 @@ App.ToolbarButtonView = Ember.View.extend({
 
 App.SelectFolder = Ember.View.extend({
     defaultTemplate: Ember.TEMPLATES.selectFolder,
+    classNames: 'selectFolder',
 
     folder: '/',
     folders: Ember.A(),
@@ -286,8 +287,6 @@ App.SelectFolder = Ember.View.extend({
     getFolders: function () {
         var that = this;
         var path = this.get('folder');
-
-        console.log('kör getFolders');
 
         $.getJSON('getFolders', {path: path}, function (data) {
             that.set('folders', data);
@@ -310,8 +309,6 @@ App.SelectFolder = Ember.View.extend({
                 path = path + '/' + name;
                 break;
         }
-
-        console.log()
 
         this.set('folder', path);
     }
@@ -412,7 +409,7 @@ App.ToolbarController = Ember.ArrayController.extend({
 });
 
 App.LeftColumnController = Ember.ArrayController.extend({
-    views: settings.getLeftColumnViewsArray() 
+    views: settings.getLeftColumnViewsArray()
 });
 
 App.SelectedTorrentsController = Ember.ArrayController.extend({

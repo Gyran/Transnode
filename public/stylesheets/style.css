@@ -14,3 +14,11 @@ body {
 #toolbar {
   padding: 5px 0;
 }
+.selectFolder {
+  position: relative;
+}
+.selectFolder .popover {
+  width: 250px;
+  top: 31px;
+  left: 81px;
+}

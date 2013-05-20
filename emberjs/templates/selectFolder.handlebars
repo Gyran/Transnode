@@ -1,10 +1,11 @@
 <div class="input-prepend input-append">
   <span class="add-on"><i class='icon-folder-open-alt'></i></span>
   {{view Ember.TextField valueBinding='view.folder' classNames='input-medium'}}
-  <button class="btn" type="button" {{action browse target='view'}}>...</button>
+  <button id='browse' class="btn" type="button" {{action browse target='view'}}>...</button>
 </div>
+
 {{#if view.isBrowsing}}
-    <div class='popover bottom fade in' style='display: block;'>
+    <div id='folders' class='popover bottom fade in' style='display:block;'>
         <div class='arrow'></div>
         <div class='popover-content'>
             <ul class='unstyled'>
