@@ -1,0 +1,22 @@
+<div class="input-prepend input-append">
+  <span class="add-on"><i class='icon-folder-open-alt'></i></span>
+  {{view Ember.TextField valueBinding='view.folder' classNames='input-medium'}}
+  <button class="btn" type="button" {{action browse target='view'}}>...</button>
+</div>
+{{#if view.isBrowsing}}
+    <div class='popover bottom fade in' style='display: block;'>
+        <div class='arrow'></div>
+        <div class='popover-content'>
+            <ul class='unstyled'>
+                {{#unless view.folders}}
+                    Loading...
+                {{/unless}}
+                {{#each view.folders}}
+                    <li {{action setFolder name target='view'}}>
+                        {{name}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+{{/if}}

@@ -39,7 +39,7 @@ config.plugins.forEach(function (pluginName) {
         frontendPlugins += fs.readFileSync(pluginPath + 'frontend.js', 'utf-8');
     }
 
-    console.log('PLUGIN', 'loaded', plugin.name);
+    console.log('PLUGIN', 'loaded', pluginPath, plugin.name);
 });
 // write frontend plugins file
 fs.writeFileSync('./public/javascripts/plugins.js', frontendPlugins, 'utf-8');
@@ -58,6 +58,40 @@ var getTorrentsEntrance = new entrance (
     }
 );
 settings.addEntrance(getTorrentsEntrance);
+
+var getFoldersEntrance = new entrance (
+    'get',
+    '/getFolders',
+    function (req, res) {
+        var p = unescape(req.query.path);
+
+        if (!fs.existsSync(p)) {
+            res.end(JSON.stringify([{name: '.'}, {name: '..'}]));
+            return;
+        }
+
+        fs.readdir(p, function (err, files) {
+            if (err) {
+                console.log('getFoldersRoute error');
+                throw err;
+            }
+
+            var folders;
+            folders = files.filter(function (file) {
+                return fs.statSync(path.join(p, file)).isDirectory();
+            }).filter(function (file) {
+                return file[0] !== '.';
+            }).map(function (file) {
+                return {name: file};
+            });
+
+            folders.unshift({name: '.'}, {name: '..'});
+
+            res.end(JSON.stringify(folders));
+        });
+    }
+);
+settings.addEntrance(getFoldersEntrance);
 
 var app = express();
 

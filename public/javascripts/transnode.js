@@ -266,6 +266,57 @@ App.ToolbarButtonView = Ember.View.extend({
     text: ''
 });
 
+App.SelectFolder = Ember.View.extend({
+    defaultTemplate: Ember.TEMPLATES.selectFolder,
+
+    folder: '/',
+    folders: Ember.A(),
+
+    isBrowsing: false,
+
+    browse: function (e) {
+        if (this.isBrowsing) {
+            this.set('isBrowsing', false);
+        } else {
+            this.getFolders();
+            this.set('isBrowsing', true);
+        }
+    },
+
+    getFolders: function () {
+        var that = this;
+        var path = this.get('folder');
+
+        console.log('kör getFolders');
+
+        $.getJSON('getFolders', {path: path}, function (data) {
+            that.set('folders', data);
+        });
+    }.observes('folder'),
+
+    setFolder: function (name) {
+        var path = this.get('folder').replace(/\/$/, '');
+
+        console.log('setFolder', name);
+
+        switch (name) {
+            case '.':
+                this.set('isBrowsing', false);
+                return;
+            case '..':
+                path = path.replace(/(.+?)\/[^\/]+?$/, "$1");
+                break;
+            default:
+                path = path + '/' + name;
+                break;
+        }
+
+        console.log()
+
+        this.set('folder', path);
+    }
+});
+
 /** /views **/
 
 settings.plugins.forEach(function(plugin, index, e) {
@@ -300,10 +351,10 @@ App.TorrentsController = Ember.ArrayController.extend({
     start: function () {
         var t = this;
         t.execute();
-
+        /*
         this.timer = setInterval(function () {
             t.execute();
-        }, t._UPDATE_INTERVAL);
+        }, t._UPDATE_INTERVAL);*/
     },
 
     stop: function () {
