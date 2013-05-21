@@ -283,24 +283,23 @@ App.SelectFolder = Ember.View.extend({
         if (this.isBrowsing) {
             this.set('isBrowsing', false);
         } else {
-            this.getFolders();
             this.set('isBrowsing', true);
+            this.getFolders();
         }
     },
 
     getFolders: function () {
-        var that = this;
-        var path = this.get('folder');
-
-        $.getJSON('getFolders', {path: path}, function (data) {
-            that.set('folders', data);
-        });
+        if (this.isBrowsing) {
+            var that = this;
+            var path = this.get('folder');
+            $.getJSON('getFolders', {path: path}, function (data) {
+                that.set('folders', data);
+            });
+        }
     }.observes('folder'),
 
     setFolder: function (name) {
         var path = this.get('folder').replace(/\/$/, '');
-
-        console.log('setFolder', name);
 
         switch (name) {
             case '.':
