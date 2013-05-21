@@ -22,3 +22,7 @@ body {
   top: 31px;
   left: 81px;
 }
+.selectFolder .popover .popover-content {
+  max-height: 400px;
+  overflow: auto;
+}
