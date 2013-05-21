@@ -59,6 +59,22 @@ var getTorrentsEntrance = new entrance (
 );
 settings.addEntrance(getTorrentsEntrance);
 
+var getTransmissionSessionEntrance = new entrance (
+    'get',
+    '/transmission/session',
+    function (req, res) {
+        transmission.sessionGet(null, function (error, result) {
+            if (!error) {
+                res.end(JSON.stringify(result));
+            } else {
+                console.log('transmissionSessionRoute error:', error);
+                throw error;
+            }
+        });
+    }
+);
+settings.addEntrance(getTransmissionSessionEntrance);
+
 var getFoldersEntrance = new entrance (
     'get',
     '/getFolders',

@@ -6,6 +6,7 @@ settings.plugins.forEach(function(plugin, index, e) {
 
 // initial settins
 settings.addNeed('torrents');
+settings.addNeed('transmissionSession');
 settings.addNeed('selectedTorrents');
 settings.addNeed('torrentColumns');
 settings.addNeed('tabs');
@@ -25,6 +26,7 @@ settings.addTorrentColumn({ name: 'UL Rate',    dataField: 'rateUploadConverted'
 settings.addTorrentColumn({ name: 'ETA',        dataField: 'etaConverted' });
 
 settings.addToUpdateQueue('controllers.torrents');
+settings.addToUpdateQueue('controllers.transmissionSession');
 
 var App = Ember.Application.create({
     LOG_TRANSITIONS: true

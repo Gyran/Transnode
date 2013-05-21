@@ -173,6 +173,10 @@ App.Torrent = Ember.Object.extend({
 
 });
 
+App.TransmissionSession = Ember.Object.extend({
+
+});
+
 /** /models **/
 
 settings.plugins.forEach(function(plugin, index, e) {
@@ -336,10 +340,7 @@ App.TorrentColumnsController = Ember.ArrayController.extend({
 });
 
 App.TorrentsController = Ember.ArrayController.extend({
-    _UPDATE_INTERVAL: 10000,
-
     _torrents: Ember.A(),
-    _timer: null,
 
     filterBy: 'none',
     sortProperties: ['addedDate'],
@@ -463,6 +464,20 @@ App.ApplicationController = Ember.Controller.extend({
             t.get(controller).update();
         });
     }
+});
+
+App.TransmissionSessionController = Ember.ObjectController.extend({
+     session: null,
+
+     update: function () {
+        var that = this;
+
+        $.getJSON('transmission/session', null, function (data) {
+            var session = App.TransmissionSession.create(data);
+
+            that.set('session', session);
+        });
+    },
 });
 
 /** /controllers **/
