@@ -1,7 +1,10 @@
 var settings = {
+    updateInterval: 10000,
+
     applicationNeeds: Ember.A(),
     plugins: Ember.A(),
     torrentColumns: Ember.A(),
+    updateQueue: Ember.A(),
 
     // fields where stuff can be displayed
     leftColumnViews: Ember.A(),
@@ -14,6 +17,10 @@ var settings = {
     // Set
     setDefaultTab: function (tab) {
         this.defaultTab = tab;
+    },
+
+    setUpdateInterval: function (interval) {
+        this.updateInterval = interval;
     },
 
     // Add
@@ -41,7 +48,15 @@ var settings = {
         this.toolbarButtons.pushObject(button);
     },
 
+    addToUpdateQueue: function (fun) {
+        this.updateQueue.pushObject(fun);
+    },
+
     // Get
+    getUpdateInterval: function () {
+        return this.updateInterval;
+    },
+
     getPlugins: function () {
         return this.plugins;
     },
@@ -68,5 +83,9 @@ var settings = {
 
     getDefaultTab: function () {
         return this.defaultTab;
+    },
+
+    getUpdateQueueArray: function () {
+        return this.updateQueue.toArray();
     }
 };

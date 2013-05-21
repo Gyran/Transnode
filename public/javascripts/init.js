@@ -24,6 +24,7 @@ settings.addTorrentColumn({ name: 'DL Rate',    dataField: 'rateDownloadConverte
 settings.addTorrentColumn({ name: 'UL Rate',    dataField: 'rateUploadConverted' });
 settings.addTorrentColumn({ name: 'ETA',        dataField: 'etaConverted' });
 
+settings.addToUpdateQueue('controllers.torrents');
 
 var App = Ember.Application.create({
     LOG_TRANSITIONS: true

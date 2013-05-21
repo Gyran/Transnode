@@ -345,20 +345,7 @@ App.TorrentsController = Ember.ArrayController.extend({
     sortProperties: ['addedDate'],
     sortAscending: false,
 
-    start: function () {
-        var t = this;
-        t.execute();
-        /*
-        this.timer = setInterval(function () {
-            t.execute();
-        }, t._UPDATE_INTERVAL);*/
-    },
-
-    stop: function () {
-        clearTimeout(this.timer);
-    },
-
-    execute: function () {
+    update: function () {
         var that = this;
 
         $.getJSON('transmission/torrents', null, function (data) {
@@ -449,7 +436,33 @@ App.SelectedTorrentsController = Ember.ArrayController.extend({
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    needs: settings.getNeedsArray()
+    updateQueue: settings.getUpdateQueueArray(),
+    needs: settings.getNeedsArray(),
+    updateInterval: settings.getUpdateInterval(),
+
+    timer: null,
+
+    start: function () {
+        var t = this;
+
+        /*
+        this.timer = setInterval(function () {
+            t.update();
+        }, t.get('updateInterval'));*/
+
+        t.update();
+    },
+
+    stop: function () {
+        clearTimeout(this.timer);
+    },
+
+    update: function () {
+        var t = this;
+        this.get('updateQueue').forEach(function(controller, index, e) {
+            t.get(controller).update();
+        });
+    }
 });
 
 /** /controllers **/
@@ -463,8 +476,8 @@ settings.plugins.forEach(function(plugin, index, e) {
 /** routes **/
 
 App.ApplicationRoute = Ember.Route.extend({
-    activate: function () {
-        this.controllerFor('torrents').start();
+    setupController: function (controller) {
+        controller.start();
     }
 });
 
