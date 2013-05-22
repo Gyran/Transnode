@@ -7,7 +7,8 @@ config = {
     plugins: [
         'controlTorrent',
         'filters',
-        'torrentDetails'
+        'torrentDetails',
+        'addTorrent'
     ],
 
     port: 3000
