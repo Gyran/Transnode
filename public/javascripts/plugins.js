@@ -180,6 +180,7 @@ filtersPlugin.preControllers = function () {
         click: function (e) {
             var torrentsController = this.get('controller.controllers.torrents');
             torrentsController.set('filterBy', this.content.get('filter'));
+            this.get('controller').update();
         },
 
         selected: function () {
