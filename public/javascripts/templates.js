@@ -86,7 +86,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
 function program1(depth0,data) {
   
   var buffer = '', stack1, hashTypes;
-  data.buffer.push("\n    <div id='folders' class='popover bottom fade in' style='display:block;'>\n        <div class='arrow'></div>\n        <div class='popover-content'>\n            <ul class='unstyled'>\n                ");
+  data.buffer.push("\n    <div id='folders' class='popover bottom fade in' style='display:block;'>\n        <div class='arrow'></div>\n        <div class='popover-content'>\n            <ul class='nav nav-list'>\n                ");
   hashTypes = {};
   stack1 = helpers.unless.call(depth0, "view.folders", {hash:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
@@ -106,15 +106,15 @@ function program2(depth0,data) {
 function program4(depth0,data) {
   
   var buffer = '', hashTypes;
-  data.buffer.push("\n                    <li ");
+  data.buffer.push("\n                    <li>\n                        <a href='#' ");
   hashTypes = {'target': "STRING"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "setFolder", "name", {hash:{
     'target': ("view")
   },contexts:[depth0,depth0],types:["ID","ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push(">\n                        ");
+  data.buffer.push(">\n                            ");
   hashTypes = {};
   data.buffer.push(escapeExpression(helpers._triageMustache.call(depth0, "name", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n                    </li>\n                ");
+  data.buffer.push("\n                        </a>\n                    </li>\n                ");
   return buffer;
   }
 
@@ -295,19 +295,27 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
 
 
   data.buffer.push("<div class='arrow'></div>\n<h3 class='popover-title'>Add Torrent</h3>\n<div class='popover-content'>\n    ");
-  hashTypes = {'folder': "STRING"};
+  hashTypes = {'folderBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.SelectFolder", {hash:{
-    'folder': ("/bla")
+    'folderBinding': ("view.folder")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n    ");
-  hashTypes = {'placeholder': "STRING"};
+  data.buffer.push("\n\n    <div class=\"input-prepend\">\n        <span class=\"add-on\"><i class='icon-globe'></i></span>\n        ");
+  hashTypes = {'placeholder': "STRING",'classNames': "STRING",'valueBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.TextField", {hash:{
-    'placeholder': ("URL")
+    'placeholder': ("URL"),
+    'classNames': ("input-medium"),
+    'valueBinding': ("view.url")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
-  data.buffer.push("\n\n    <button ");
+  data.buffer.push("\n    </div>\n\n    <label class=\"checkbox\">\n        ");
+  hashTypes = {'checkedBinding': "STRING"};
+  data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.Checkbox", {hash:{
+    'checkedBinding': ("view.startWhenAdded")
+  },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n        Start when added\n    </label>\n\n    ");
+  data.buffer.push("\n\n    <button class='btn' ");
   hashTypes = {'target': "STRING"};
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "addTorrent", {hash:{
-    'target': ("App.AddTorrentController")
+    'target': ("view")
   },contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
   data.buffer.push(">Add Torrent</button>\n</div>");
   return buffer;

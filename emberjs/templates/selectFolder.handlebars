@@ -8,13 +8,15 @@
     <div id='folders' class='popover bottom fade in' style='display:block;'>
         <div class='arrow'></div>
         <div class='popover-content'>
-            <ul class='unstyled'>
+            <ul class='nav nav-list'>
                 {{#unless view.folders}}
                     Loading...
                 {{/unless}}
                 {{#each view.folders}}
-                    <li {{action setFolder name target='view'}}>
-                        {{name}}
+                    <li>
+                        <a href='#' {{action setFolder name target='view'}}>
+                            {{name}}
+                        </a>
                     </li>
                 {{/each}}
             </ul>
