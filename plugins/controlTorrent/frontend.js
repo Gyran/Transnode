@@ -44,6 +44,7 @@ controlTorrentPlugin.postViews = function () {
         text: 'Start',
 
         click: function (e) {
+            var controller = this.get('controller');
             var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
 
             if (selectedTorrents.get('length') <= 0) {
@@ -52,10 +53,13 @@ controlTorrentPlugin.postViews = function () {
                 that.startTorrents(selectedTorrents, function (err) {
                     if (!err) {
                         console.log('done!');
+                        controller.update();
                     } else {
                         console.log('error!');
                     }
                 });
+
+                this.get('controller').update();
             }
         }
 
@@ -66,6 +70,7 @@ controlTorrentPlugin.postViews = function () {
         text: 'Stop',
 
         click: function (e) {
+            var controller = this.get('controller');
             var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
 
             if (selectedTorrents.get('length') <= 0) {
@@ -74,6 +79,9 @@ controlTorrentPlugin.postViews = function () {
                 that.stopTorrents(selectedTorrents, function (err) {
                     if (!err) {
                         console.log('done!');
+                        setTimeout(function () { // it takes some time before the torrent is stopped
+                            controller.update();
+                        }, 500);
                     } else {
                         console.log('error!');
                     }
