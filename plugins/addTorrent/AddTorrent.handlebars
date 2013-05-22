@@ -1,0 +1,23 @@
+<div class='arrow'></div>
+<h3 class='popover-title'>Add Torrent</h3>
+<div class='popover-content'>
+    {{view App.SelectFolder folderBinding='view.folder'}}
+
+    <div class="input-prepend">
+        <span class="add-on"><i class='icon-globe'></i></span>
+        {{view Ember.TextField placeholder='URL' classNames='input-medium' valueBinding='view.url'}}
+    </div>
+
+    <label class="checkbox">
+        {{view Ember.Checkbox checkedBinding='view.startWhenAdded'}}
+        Start when added
+    </label>
+
+    {{!<div class="fileupload fileupload-new" data-provides="fileupload">
+      <span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span><input type="file" /></span>
+      <span class="fileupload-preview"></span>
+      <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+  </div>}}
+
+    <button class='btn' {{action addTorrent target='view'}}>Add Torrent</button>
+</div>

@@ -1,5 +1,6 @@
 var settings = {
     updateInterval: 10000,
+    downloadDir: '/Users/Gyran/Downloads',
 
     applicationNeeds: Ember.A(),
     plugins: Ember.A(),
@@ -21,6 +22,10 @@ var settings = {
 
     setUpdateInterval: function (interval) {
         this.updateInterval = interval;
+    },
+
+    setDownloadDir: function (dir) {
+        this.downloadDir = dir;
     },
 
     // Add
@@ -55,6 +60,10 @@ var settings = {
     // Get
     getUpdateInterval: function () {
         return this.updateInterval;
+    },
+
+    getDownloadDir: function () {
+        return this.downloadDir;
     },
 
     getPlugins: function () {
