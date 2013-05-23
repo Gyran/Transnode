@@ -72,9 +72,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   hashTypes = {};
   options = {hash:{},contexts:[depth0],types:["STRING"],hashTypes:hashTypes,data:data};
   data.buffer.push(escapeExpression(((stack1 = helpers.partial),stack1 ? stack1.call(depth0, "rightColumn", options) : helperMissing.call(depth0, "partial", "rightColumn", options))));
-  data.buffer.push("\n		</div>\n	</div>\n</div>\n");
-  hashTypes = {};
-  data.buffer.push(escapeExpression(helpers.view.call(depth0, "App.SelectFolder", {hash:{},contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data})));
+  data.buffer.push("\n		</div>\n	</div>\n</div>");
   return buffer;
   
 });
