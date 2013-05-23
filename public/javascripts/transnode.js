@@ -500,7 +500,7 @@ App.ApplicationRoute = Ember.Route.extend({
 /** helpers **/
 
 Ember.Handlebars.registerBoundHelper('torrentField', function (field, torrent, options) {
-    return options.contexts.objectAt(1).get(field);
+    return torrent.get(field);
 });
 
 /** /helpers **/
