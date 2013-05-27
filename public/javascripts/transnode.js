@@ -75,7 +75,7 @@ App.Torrent = Ember.Object.extend({
         return this.get('status') === this._STATUS_DOWNLOAD;
     }.property('status'),
 
-    isSeeding: function () {
+    isSeeding: function () {
         return this.get('status') === this._STATUS_SEED;
     }.property('status'),
 
@@ -445,10 +445,9 @@ App.ApplicationController = Ember.Controller.extend({
     start: function () {
         var t = this;
 
-        /*
         this.timer = setInterval(function () {
             t.update();
-        }, t.get('updateInterval'));*/
+        }, t.get('updateInterval'));
 
         t.update();
     },
@@ -476,7 +475,7 @@ App.TransmissionSessionController = Ember.ObjectController.extend({
 
             that.set('session', session);
         });
-    },
+    }
 });
 
 /** /controllers **/
