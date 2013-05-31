@@ -3,12 +3,13 @@ config = {
         host: 'http://localhost:9091',
         auth: null
     },
-
+    
     plugins: [
         'controlTorrent',
-        'filters',
         'torrentDetails',
-        'addTorrent'
+        'filters',
+        'addTorrent',
+        'removeTorrent'
     ],
 
     port: 3000

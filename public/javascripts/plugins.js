@@ -138,7 +138,35 @@ controlTorrentPlugin.postViews = function () {
     this.addToolbarButton(App.ToolbarStarTorrentButtonView);
     this.addToolbarButton(App.ToolbarStopTorrentButtonView);
 };
-/**********************//*** Filterplugin ***/
+/**********************//****** torrentdetails plugin ***/
+var torrentDetailsPlugin = new transnodeFrontendPlugin('Torrent Details');
+torrentDetailsPlugin.tab = null;
+
+torrentDetailsPlugin.preControllers = function () {
+    App.TorrentDetailsView = Ember.View.extend({
+            defaultTemplate: Ember.TEMPLATES.torrentDetails,
+
+            torrent: function () {
+                var selectedTorrent = this.get('controller.controllers.selectedTorrents.selectedTorrent');
+                return selectedTorrent;
+            }.property('controller.controllers.selectedTorrents.selectedTorrent'),
+
+            progressBarStyle: function () {
+                var percentDone = (this.get('torrent.percentDone') * 100).toFixed(0);
+                return 'width: ' + percentDone + '%;';
+            }.property('torrent.percentDone')
+        });
+
+        this.tab = {
+            name: 'Details',
+            view: App.TorrentDetailsView
+        },
+
+        this.setDefaultTab(this.tab);
+        this.addTab(this.tab);
+};
+/**********************/
+/*** Filterplugin ***/
 
 var filtersPlugin = new transnodeFrontendPlugin('Filters');
 filtersPlugin.preControllers = function () {
@@ -216,35 +244,7 @@ filtersPlugin.preControllers = function () {
 
     settings.addLeftColumnView(App.FiltersView);
 };
-/**********************//****** torrentdetails plugin ***/
-var torrentDetailsPlugin = new transnodeFrontendPlugin('Torrent Details');
-torrentDetailsPlugin.tab = null;
-
-torrentDetailsPlugin.preControllers = function () {
-    App.TorrentDetailsView = Ember.View.extend({
-            defaultTemplate: Ember.TEMPLATES.torrentDetails,
-
-            torrent: function () {
-                var selectedTorrent = this.get('controller.controllers.selectedTorrents.selectedTorrent');
-                return selectedTorrent;
-            }.property('controller.controllers.selectedTorrents.selectedTorrent'),
-
-            progressBarStyle: function () {
-                var percentDone = (this.get('torrent.percentDone') * 100).toFixed(0);
-                return 'width: ' + percentDone + '%;';
-            }.property('torrent.percentDone')
-        });
-
-        this.tab = {
-            name: 'Details',
-            view: App.TorrentDetailsView
-        },
-
-        this.setDefaultTab(this.tab);
-        this.addTab(this.tab);
-};
-/**********************/
-/******** add torrent plugin *****/
+/**********************//******** add torrent plugin *****/
 var addTorrentPlugin = new transnodeFrontendPlugin('Add Torrent');
 
 addTorrentPlugin.postViews = function () {
@@ -325,4 +325,105 @@ addTorrentPlugin.postControllers = function () {
     });
 };
 
+/**********************//******** remove torrent plugin *****/
+var removeTorrentPlugin = new transnodeFrontendPlugin('Remove Torrent');
+
+removeTorrentPlugin.removeTorrents = function (ids, cb) {
+    var successFun = function (data) {
+        cb();
+    };
+
+    var failFun = function () {
+        cb(true);
+    };
+
+    if (ids.get('length') <= 0) {
+        cb(true);
+    }
+
+    $.post('transmission/torrents/removeTorrents',
+        { 'ids': ids.toArray() },
+        successFun).fail(failFun);
+};
+
+removeTorrentPlugin.removeData = function (ids, cb) {
+    var successFun = function (data) {
+        cb();
+    };
+
+    var failFun = function () {
+        cb(true);
+    };
+
+    if (ids.get('length') <= 0) {
+        cb(true);
+    }
+
+    $.post('transmission/torrents/RemoveData',
+        { 'ids': ids.toArray() },
+        successFun).fail(failFun);
+};
+
+removeTorrentPlugin.postViews = function () {
+    var that = this;
+
+    App.ToolbarRemoveTorrentButtonView = App.ToolbarButtonView.create({
+        icon: 'icon-remove icon-large',
+        text: 'Remove Torrent',
+
+        click: function (e) {
+            var controller = this.get('controller');
+            var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
+
+            if (selectedTorrents.get('length') <= 0) {
+                alert('You have to pick a torrent first');
+            } else {
+                that.removeTorrents(selectedTorrents, function (err) {
+                    if (!err) {
+                        console.log('done!');
+                        setTimeout(function () { // it takes some time before the torrent is deleted
+                            controller.update();
+                        }, 500);
+                    } else {
+                        console.log('error!');
+                    }
+                });
+
+                this.get('controller').update();
+            }
+        }
+
+    });
+
+    App.ToolbarRemoveDataButtonView = App.ToolbarButtonView.create({
+        icon: 'icon-remove icon-large',
+        text: 'Remove Torrent and Data',
+
+        click: function (e) {
+            var controller = this.get('controller');
+            var selectedTorrents = this.get('controller.controllers.selectedTorrents.content');
+
+            if (selectedTorrents.get('length') <= 0) {
+                alert('You have to pick a torrent first');
+            } else {
+                that.removeData(selectedTorrents, function (err) {
+
+                    if (!err) {
+                        console.log('done!');
+                        setTimeout(function () { // it takes some time before the torrent is deleted
+                            controller.update();
+                        }, 500);
+                    } else {
+                        console.log('error!');
+                    }
+                });
+            }
+        }
+
+    });
+
+
+    this.addToolbarButton(App.ToolbarRemoveTorrentButtonView);
+    this.addToolbarButton(App.ToolbarRemoveDataButtonView);
+};
 /**********************/
